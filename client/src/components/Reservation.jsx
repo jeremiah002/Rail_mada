@@ -1,38 +1,35 @@
 import { Link, useLocation } from "react-router-dom";
-import React, { useState } from "react";
 import "../App.css";
 import logo from "../assets/logo.png";
 import logobody from "../assets/logobody.png";
-
-const classe = ["1re classe", "2eme classe", "3eme classe"];
 
 function Reservation() {
   const location = useLocation();
 
   return (
     <>
-      <nav id="header" classeName="fixed w-full z-30 top-0 text-white gradient">
-        <div classeName="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
-          <div classeName="pl-4 flex items-center">
+      <nav id="header" className="fixed w-full z-30 top-0 text-white gradient">
+        <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
+          <div className="pl-4 flex items-center">
             <a
-              classeName="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+              className="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
               href="#"
             >
               <img
                 id="rectangle"
                 src={logo}
-                classeName="fill-current inline w-10 pb-2 mr-2"
+                className="fill-current inline w-10 pb-2 mr-2"
               />
               RAIL'S MADA
             </a>
           </div>
-          <div classeName="block lg:hidden pr-4">
+          <div className="block lg:hidden pr-4">
             <button
               id="nav-toggle"
-              classeName="flex items-center p-1 text-pink-800 hover:text-gray-900 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+              className="flex items-center p-1 text-pink-800 hover:text-gray-900 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
             >
               <svg
-                classeName="fill-current h-6 w-6"
+                className="fill-current h-6 w-6"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -42,13 +39,13 @@ function Reservation() {
             </button>
           </div>
           <div
-            classeName="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 bg-white lg:bg-transparent text-white p-4 lg:p-0 z-20"
+            className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 bg-white lg:bg-transparent text-white p-4 lg:p-0 z-20"
             id="nav-content"
           >
-            <ul classeName="list-reset lg:flex justify-end flex-1 items-center">
-              <li classeName="mr-3">
+            <ul className="list-reset lg:flex justify-end flex-1 items-center">
+              <li className="mr-3">
                 <Link
-                  classeName={`inline-block py-2 px-4 no-underline ${
+                  className={`inline-block py-2 px-4 no-underline ${
                     location.pathname === "/" ? "font-bold" : ""
                   }`}
                   to="/"
@@ -57,7 +54,7 @@ function Reservation() {
                   Acceuil
                 </Link>
               </li>
-              <li classeName="mr-3">
+              <li className="mr-3">
                 <Link
                   className={`inline-block py-2 px-4 no-underline ${
                     location.pathname === "/resa" ? "font-bold" : ""
@@ -89,10 +86,15 @@ function Reservation() {
               <form>
                 <div className="space-y-12">
                   <div className="border-b border-gray-900/10 pb-12">
-                    <h2 className="text-base font-semibold leading-7 text-gray-900">Réservation</h2>
+                    <h2 className="text-base font-semibold leading-7 text-gray-900">
+                      Réservation
+                    </h2>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
                       <div className="sm:col-span-2 sm:col-start-1">
-                        <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="username"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Nom du voyageur
                         </label>
                         <div className="mt-2">
@@ -109,7 +111,10 @@ function Reservation() {
                         </div>
                       </div>
                       <div className="sm:col-span-2">
-                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Email address
                         </label>
                         <div className="mt-2">
@@ -128,7 +133,10 @@ function Reservation() {
                   <div className="border-b border-gray-900/10 pb-12">
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                       <div className="sm:col-span-3">
-                        <label htmlFor="classe" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="classe"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Date
                         </label>
                         <div className="mt-2">
@@ -142,7 +150,10 @@ function Reservation() {
                       </div>
                       <br />
                       <div className="sm:col-span-3">
-                        <label htmlFor="itineraire" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="itineraire"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Itinéraire
                         </label>
                         <div className="mt-2">
@@ -159,7 +170,10 @@ function Reservation() {
                         </div>
                       </div>
                       <div className="sm:col-span-3">
-                        <label htmlFor="classe" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="classe"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Classe
                         </label>
                         <div className="mt-2">
@@ -176,7 +190,10 @@ function Reservation() {
                         </div>
                       </div>
                       <div className="sm:col-span-3">
-                        <label htmlFor="frais" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="frais"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Frais
                         </label>
                         <div className="mt-2">
@@ -193,7 +210,10 @@ function Reservation() {
                         </div>
                       </div>
                       <div className="sm:col-span-3">
-                        <label htmlFor="nombrePlace" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="nombrePlace"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Nombre Place
                         </label>
                         <div className="mt-2">
@@ -210,7 +230,10 @@ function Reservation() {
                   </div>
                 </div>
                 <div className="mt-6 flex items-center justify-end gap-x-6">
-                  <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                  <button
+                    type="button"
+                    className="text-sm font-semibold leading-6 text-gray-900"
+                  >
                     Annuler
                   </button>
                   <button
@@ -226,135 +249,137 @@ function Reservation() {
           {/* Blog2 */}
           <div className="w-full md:w-3/5 px-4 mb-4">
             <div className="neon bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-2 text-gray-800">Voyager c'est vivre</h2>
+              <h2 className="text-2xl font-bold mb-2 text-gray-800">
+                Voyager c'est vivre
+              </h2>
               <div className="flex justify-center mb-2">
                 <img src={logobody} alt="Logobody" className="w-32 h-32" />
               </div>
               <p className="text-gray-700">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates, nemo id quam, tempore esse fugit 
-                eos doloremque. Dolore illum quaerat iusto sunt laudantium omnis veniam enim cupiditate, assumenda autem
-                numquam.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptates, nemo id quam, tempore esse fugit eos doloremque.
+                Dolore illum quaerat iusto sunt laudantium omnis veniam enim
+                cupiditate, assumenda autem numquam.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-
-      <footer classeName="bg-white">
-        <div classeName="container mx-auto px-8">
-          <div classeName="w-full flex flex-col md:flex-row py-6">
-            <div classeName="flex-1 mb-6 text-black">
+      <footer className="bg-white">
+        <div className="container mx-auto px-8">
+          <div className="w-full flex flex-col md:flex-row py-6">
+            <div className="flex-1 mb-6 text-black">
               <a
-                classeName="text-purple-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+                className="text-purple-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
                 href="#"
               >
-                <img src={logobody} classeName="fill-current inline w-10 pb-4" />
+                <img src={logobody} className="fill-current inline w-10 pb-4" />
                 RAIL'S MADA
               </a>
             </div>
-            <div classeName="flex-1">
-              <p classeName="uppercase text-gray-500 md:mb-6">Links</p>
-              <ul classeName="list-reset mb-6">
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+            <div className="flex-1">
+              <p className="uppercase text-gray-500 md:mb-6">Links</p>
+              <ul className="list-reset mb-6">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     FAQ
                   </a>
                 </li>
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     Help
                   </a>
                 </li>
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     Support
                   </a>
                 </li>
               </ul>
             </div>
-            <div classeName="flex-1">
-              <p classeName="uppercase text-gray-500 md:mb-6">Legal</p>
-              <ul classeName="list-reset mb-6">
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+            <div className="flex-1">
+              <p className="uppercase text-gray-500 md:mb-6">Legal</p>
+              <ul className="list-reset mb-6">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     Terms
                   </a>
                 </li>
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     Privacy
                   </a>
                 </li>
               </ul>
             </div>
-            <div classeName="flex-1">
-              <p classeName="uppercase text-gray-500 md:mb-6">Social</p>
-              <ul classeName="list-reset mb-6">
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+            <div className="flex-1">
+              <p className="uppercase text-gray-500 md:mb-6">Social</p>
+              <ul className="list-reset mb-6">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     Facebook
                   </a>
                 </li>
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     Linkedin
                   </a>
                 </li>
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     Twitter
                   </a>
                 </li>
               </ul>
             </div>
-            <div classeName="flex-1">
-              <p classeName="uppercase text-gray-500 md:mb-6">Company</p>
-              <ul classeName="list-reset mb-6">
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+            <div className="flex-1">
+              <p className="uppercase text-gray-500 md:mb-6">Company</p>
+              <ul className="list-reset mb-6">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     Official Blog
                   </a>
                 </li>
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     About Us
                   </a>
                 </li>
-                <li classeName="mt-2 inline-block mr-2 md:block md:mr-0">
+                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                   <a
                     href="#"
-                    classeName="no-underline hover:underline text-gray-800 hover:text-pink-500"
+                    className="no-underline hover:underline text-gray-800 hover:text-pink-500"
                   >
                     Contact
                   </a>

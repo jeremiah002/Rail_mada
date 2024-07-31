@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import '../../index.css';
 import logo from '../../assets/logo.png';
 
-function NavBar() {
+function NavBar({ onNavigate }) {
   useEffect(() => {
     const handleScroll = () => {
       const rectangle = document.getElementById('rectangle');
@@ -10,7 +10,7 @@ function NavBar() {
       const resa = document.getElementById('resa');
       const tarif = document.getElementById('tarif');
       
-      if (window.scrollY > 40) {
+      if (window.scrollY > 10) {
         rectangle.src = 'src/assets/logobody.png';
         acc.style.color = "black";
         resa.style.color = "black";
@@ -31,7 +31,6 @@ function NavBar() {
     var toToggle = document.querySelectorAll(".toggleColour");
 
     document.addEventListener("scroll", function () {
-      /*Apply classes for slide in bar*/
       scrollpos = window.scrollY;
 
       if (scrollpos > 10) {
@@ -40,7 +39,7 @@ function NavBar() {
         navaction.classList.add("gradient");
         navaction.classList.remove("text-gray-800");
         navaction.classList.add("text-white");
-        //Use to switch toggleColour colours
+
         for (var i = 0; i < toToggle.length; i++) {
           toToggle[i].classList.add("text-gray-800");
           toToggle[i].classList.remove("text-white");
@@ -54,7 +53,7 @@ function NavBar() {
         navaction.classList.add("bg-white");
         navaction.classList.remove("text-white");
         navaction.classList.add("text-gray-800");
-        //Use to switch toggleColour colours
+
         for (var i = 0; i < toToggle.length; i++) {
           toToggle[i].classList.add("text-white");
           toToggle[i].classList.remove("text-gray-800");
@@ -68,30 +67,19 @@ function NavBar() {
 
     var navMenuDiv = document.getElementById("nav-content");
     var navMenu = document.getElementById("nav-toggle");
-    var navAction = document.getElementById("navAction");
-    var acc = document.getElementById('acc');
-    var resa = document.getElementById('resa');
-    var tarif = document.getElementById('tarif');
 
     document.onclick = check;
     function check(e) {
       var target = (e && e.target) || (event && event.srcElement);
 
-      //Nav Menu
       if (!checkParent(target, navMenuDiv)) {
-        // click NOT on the menu
-        acc.style.color = "black";
-        resa.style.color = "black";
-        tarif.style.color = "black";
         if (checkParent(target, navMenu)) {
-          // click on the link
           if (navMenuDiv.classList.contains("hidden")) {
             navMenuDiv.classList.remove("hidden");
           } else {
             navMenuDiv.classList.add("hidden");
           }
         } else {
-          // click both outside link and outside menu, hide menu
           navMenuDiv.classList.add("hidden");
         }
       }
@@ -132,6 +120,7 @@ function NavBar() {
           <a
             className="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
             href="#"
+            onClick={() => onNavigate('body')}
           >
             <img
               id="rectangle"
@@ -166,6 +155,7 @@ function NavBar() {
                 className="inline-block py-2 px-4 text-white font-bold no-underline"
                 href="#"
                 id="acc"
+                onClick={() => onNavigate('body')}
               >
                 Acceuil
               </a>
@@ -175,6 +165,7 @@ function NavBar() {
                 className="inline-block text-white no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
                 id="resa"
                 href="#"
+                onClick={() => onNavigate('reservation')}
               >
                 Reservation
               </a>
@@ -183,6 +174,7 @@ function NavBar() {
           <button
             id="navAction"
             className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+            onClick={() => onNavigate('reservation')}
           >
             Reserver
           </button>

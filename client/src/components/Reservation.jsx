@@ -266,10 +266,11 @@ function Reservation() {
         </div>
       </div>
 
-      <footer className="bg-white">
-        <div className="container mx-auto px-8">
-          <div className="w-full flex flex-col md:flex-row py-6">
-            <div className="flex-1 mb-6 text-black">
+
+      <footer classeName="bg-white">
+        <div classeName="container mx-auto px-8">
+          <div classeName="w-full flex flex-col md:flex-row py-6">
+            <div classeName="flex-1 mb-6 text-black">
               <a
                 className="text-purple-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
                 href="#"

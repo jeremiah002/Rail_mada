@@ -1,0 +1,26 @@
+.gradient {
+    background: linear-gradient(90deg, #3379d5 0%, #9c41e7 100%);
+}
+.neon {
+    box-shadow: 0 0 1px #fff,
+                0 0 4px #fff,
+                0 0 6px rgba(0, 77, 177, 0.438)
+}
+.fade-enter {
+    opacity: 0;
+    transform: translateX(20%);
+}
+.fade-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 500ms, transform 500ms;
+}
+.fade-exit {
+    opacity: 1;
+    transform: translateX(0);
+}
+.fade-exit-active {
+    opacity: 0;
+    transform: translateX(-20%);
+    transition: opacity 500ms, transform 500ms;
+}

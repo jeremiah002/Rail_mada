@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import React, { useState } from "react";
-import { createVoyageur } from "../services/apiReservation";
+import { createVoyageur } from "../services/reservationApi.js";
 import "../App.css";
 import logo from "../assets/logo.png";
 import logobody from "../assets/logobody.png";

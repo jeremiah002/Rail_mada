@@ -4,11 +4,16 @@ import Home from './components/Home';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Reservation from './components/Reservation';
 import Login from './components/Login';
+import Admin from './components/Admin';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Login/>
+  },
+  {
+    path: '/admin',
+    element: <Admin/>
   },
   {
     path: '/home',

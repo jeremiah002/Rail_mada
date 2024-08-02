@@ -8,7 +8,7 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     // Contrôleur pour gérer les opérations sur les catégories
     public class CategorieController(AppDbContext context) : ControllerBase
     {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
 import "../App.css";
 import logo from "../assets/logo.png";
+import { auth } from "../services/authApi";
 
 function Login() {
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -14,6 +14,7 @@ function Login() {
     const handleSubmit = async (e) => {
       e.preventDefault();
       console.log('Form Data:', formData);
+      setFormData({ email: '', password: '' });
       try {
         const response = await auth(formData);
         console.log(response);
@@ -62,7 +63,6 @@ function Login() {
                     </div>
                     <div className="flex justify-start pl-5 items-center mt-1">
                         <a href="#" className="text-xs text-white">mot de passe oublié?</a>
-                        <Link to="/signup" className="text-xs text-blue-500 ml-2 hover:underline">s'inscrire</Link>
                     </div>
                     <div className="flex justify-center mt-4">
                         <button type="submit" className="mx-4 mt-6 neoni hover:neonih h-10 w-40 rounded-md bg-[#debb3b] font-light text-white text-lg tracking-wide transition duration-1000">Connexion</button>

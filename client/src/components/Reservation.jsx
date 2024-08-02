@@ -84,9 +84,9 @@ function Reservation() {
               <li className="mr-3">
                 <Link
                   className={`inline-block py-2 px-4 no-underline ${
-                    location.pathname === "/home" ? "font-bold" : ""
+                    location.pathname === "/" ? "font-bold" : ""
                   }`}
-                  to="/home"
+                  to="/"
                   id="acc"
                 >
                   Acceuil

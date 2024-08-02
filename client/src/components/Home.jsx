@@ -75,7 +75,7 @@ function Home() {
               <ul className="list-reset lg:flex justify-end flex-1 items-center">
                 <li className="mr-3">
                   <Link
-                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/home' ? 'font-bold' : ''}`}
+                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/' ? 'font-bold' : ''}`}
                   to="/"
                     id="acc"
                     style={{ color: scrolled ? "black" : "white" }}
@@ -379,7 +379,7 @@ function Home() {
           viewBox="0 0 1439 147"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
         >
           <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
             <g transform="translate(-1.000000, -14.000000)" fillRule="nonzero">

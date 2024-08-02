@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import logo from "../assets/logo.png";
-import { createItineraire, getItineraires } from "../services/admin/itineraireApi";
+import { createItineraire, getItineraires, deleteItineraire } from "../services/admin/itineraireApi";
 import { createTrain, getTrains } from "../services/admin/trainApi";
 import { createCategorie, getCategories } from "../services/admin/categorieApi";
 import { getVoyageurs } from "../services/reservationApi";
@@ -135,6 +135,15 @@ function Admin() {
 
   // Voyageur
 
+  const [formDataVoyageur, setFormDataVoyageur] = useState({
+    numTicket: "",
+    nomVoyageur: "",
+    emailVoyageur: "",
+    dateDepart: "",
+    nbPlace: 1,
+    codeCategorie: "",
+  });
+
   useEffect(() => {
     fetchVoyageurs();
   }, []);
@@ -233,8 +242,8 @@ function Admin() {
                   {trains.length !== 0 ? (
                     trains.map((train) => (
                       <tr
-                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
                         key={train.immatriculation}
+                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
                         <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                           {train.immatriculation}
@@ -254,7 +263,10 @@ function Admin() {
                     ))
                   ) : (
                     <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      <td
+                        colSpan="3"
+                        className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                      >
                         AUCUN TRAIN
                       </td>
                     </tr>
@@ -262,7 +274,6 @@ function Admin() {
                 </tbody>
               </table>
             </div>
-
 
             <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
@@ -301,41 +312,47 @@ function Admin() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                {categories.length !== 0 ? (
+                  {categories.length !== 0 ? (
                     categories.map((categorie) => (
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700" key={categorie.codeCategorie}>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      {categorie.libelleCategorie}
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      {categorie.immatriculation}
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      {categorie.nbPlaceSupporte}
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      {categorie.frais}
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="text-blue-600 dark:text-blue-500 hover:underline"
+                      <tr
+                        key={categorie.codeCategorie}
+                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
-                    ))) : (
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      AUCUN CATEGORIE
-                    </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {categorie.libelleCategorie}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                          {categorie.immatriculation}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {categorie.nbPlaceSupporte}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {categorie.frais}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                          <a
+                            href="#"
+                            className="text-blue-600 dark:text-blue-500 hover:underline"
+                          >
+                            Edit
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <td
+                        colSpan="5"
+                        className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                      >
+                        AUCUN CATEGORIE
+                      </td>
                     </tr>
-                    )}
+                  )}
                 </tbody>
               </table>
             </div>
-
 
             <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
@@ -380,45 +397,50 @@ function Admin() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                {itineraires.length !== 0 ? (
+                  {itineraires.length !== 0 ? (
                     itineraires.map((itineraire) => (
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700" key={itineraire.codeItineraire}>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                        {itineraire.lieuDepart}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                        {itineraire.lieuArrivee}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      {itineraire.codeItineraire}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      {itineraire.jourDepart}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      {itineraire.heureDepart}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                        <a
-                          href="#"
-                          className="text-blue-600 dark:text-blue-500 hover:underline"
-                        >
-                          Edit
-                        </a>
+                      <tr
+                        key={itineraire.codeItineraire}
+                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {itineraire.lieuDepart}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                          {itineraire.lieuArrivee}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {itineraire.codeItineraire}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {itineraire.jourDepart}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {itineraire.heureDepart}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                          <a
+                            href="#"
+                            className="text-blue-600 dark:text-blue-500 hover:underline"
+                          >
+                            Edit
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <td
+                        colSpan="6"
+                        className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                      >
+                        AUCUN ITINERAIRE
                       </td>
                     </tr>
-                    ))) : (
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      AUCUN ITINERAIRE
-                    </td>
-                    </tr>
-                    )}
-                    
+                  )}
                 </tbody>
               </table>
             </div>
-
 
             <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
@@ -431,13 +453,19 @@ function Admin() {
                       scope="col"
                       className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
                     >
-                      Libelle
+                      Nom
                     </th>
                     <th
                       scope="col"
                       className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
                     >
-                      Immatriculation
+                      Email
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Date depart
                     </th>
                     <th
                       scope="col"
@@ -449,7 +477,7 @@ function Admin() {
                       scope="col"
                       className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
                     >
-                      Frais
+                      Code Categorie
                     </th>
                     <th scope="col" className="p-4">
                       <span className="sr-only">Edit</span>
@@ -457,41 +485,47 @@ function Admin() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                {voyageurs.length !== 0 ? (
+                  {voyageurs.length !== 0 ? (
                     voyageurs.map((voyageur) => (
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700" key={voyageur.codevoyageur}>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                        {voyageur.lieuDepart}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                        {voyageur.lieuArrivee}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      {voyageur.codevoyageur}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      {voyageur.jourDepart}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      {voyageur.heureDepart}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                        <a
-                          href="#"
-                          className="text-blue-600 dark:text-blue-500 hover:underline"
-                        >
-                          Edit
-                        </a>
+                      <tr
+                        key={voyageur.numTicket}
+                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.nomVoyageur}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.emailVoyageur}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.dateDepart}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.nbPlace}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.codeCategorie}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                          <a
+                            href="#"
+                            className="text-blue-600 dark:text-blue-500 hover:underline"
+                          >
+                            Edit
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <td
+                        colSpan="6"
+                        className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                      >
+                        AUCUN VOYAGEUR
                       </td>
                     </tr>
-                    ))) : (
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      AUCUN VOYAGEUR
-                    </td>
-                    </tr>
-                    )}
-                   
+                  )}
                 </tbody>
               </table>
             </div>
@@ -520,7 +554,7 @@ function Admin() {
                               id="immatriculation"
                               autoComplete="immatriculation"
                               className="block w-full border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                              placeholder="T-001"
+                              placeholder="Immatriculation du Train"
                               onChange={handleChangeTrain}
                             />
                           </div>
@@ -542,9 +576,15 @@ function Admin() {
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             onChange={handleChangeTrain}
                           >
-                            <option>TNR</option>
-                            <option>MKR</option>
-                            <option>WFI</option>
+                            {itineraires.length !== 0 ? (
+                              itineraires.map((itineraire) => (
+                                <option key={itineraire.codeItineraire} value={itineraire.codeItineraire}>
+                                  {itineraire.codeItineraire}
+                                </option>
+                              ))
+                            ) : (
+                              <option value=""></option>
+                            )}
                           </select>
                         </div>
                       </div>
@@ -714,7 +754,7 @@ function Admin() {
                             id="destination"
                             autoComplete="address-level2"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            placeholder="lieu"
+                            placeholder="lieu d'arrivee"
                             onChange={handleChangeItineraire}
                           />
                         </div>
@@ -780,6 +820,7 @@ function Admin() {
                           <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                             <input
                               type="time"
+                              defaultValue={"00:00"}
                               name="heureDepart"
                               id="time"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6"

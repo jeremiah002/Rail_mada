@@ -9,6 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Ajouter des services au conteneur.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+
 // Configure les services pour les contrôleurs
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -49,6 +62,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// Use CORS policy
+app.UseCors("AllowSpecificOrigin");
 
 // Configurer les points de terminaison pour les contrôleurs
 app.MapControllers();

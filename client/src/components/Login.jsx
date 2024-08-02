@@ -21,6 +21,8 @@ function Login() {
       try {
         const response = await auth(formData);
         if (response.status === 200) {
+            const { token } = response.data;
+            localStorage.setItem('authToken', token);
             navigate("/admin");
         }
       } catch (error) {

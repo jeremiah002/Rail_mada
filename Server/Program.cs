@@ -13,10 +13,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:5173")
-                            .AllowAnyMethod()
-                            .AllowAnyHeader());
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
 });
+
 
 // Configure les services pour les contrôleurs
 builder.Services.AddControllers();
@@ -58,6 +62,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// Use CORS policy
+app.UseCors("AllowSpecificOrigin");
 
 // Configurer les points de terminaison pour les contrôleurs
 app.MapControllers();

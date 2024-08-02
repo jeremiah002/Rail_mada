@@ -9,6 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Ajouter des services au conteneur.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://localhost:5173")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader());
+});
+
 // Configure les services pour les contrôleurs
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -124,10 +124,15 @@ function Reservation() {
               <form onSubmit={handleSubmit}>
                 <div className="space-y-12">
                   <div className="border-b border-gray-900/10 pb-12">
-                    <h2 className="text-base font-semibold leading-7 text-gray-900">Réservation</h2>
+                    <h2 className="text-base font-semibold leading-7 text-gray-900">
+                      Réservation
+                    </h2>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
                       <div className="sm:col-span-2 sm:col-start-1">
-                        <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="username"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Nom du voyageur
                         </label>
                         <div className="mt-2">
@@ -145,7 +150,10 @@ function Reservation() {
                         </div>
                       </div>
                       <div className="sm:col-span-2">
-                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Email address
                         </label>
                         <div className="mt-2">
@@ -165,7 +173,10 @@ function Reservation() {
                   <div className="border-b border-gray-900/10 pb-12">
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                       <div className="sm:col-span-3">
-                        <label htmlFor="classe" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="classe"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Date
                         </label>
                         <div className="mt-2">
@@ -180,7 +191,10 @@ function Reservation() {
                       </div>
                       <br />
                       <div className="sm:col-span-3">
-                        <label htmlFor="itineraire" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="itineraire"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Itinéraire
                         </label>
                         <div className="mt-2">
@@ -199,7 +213,10 @@ function Reservation() {
                         </div>
                       </div>
                       <div className="sm:col-span-3">
-                        <label htmlFor="classe" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="classe"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Classe
                         </label>
                         <div className="mt-2">
@@ -220,7 +237,10 @@ function Reservation() {
                         </div>
                       </div>
                       <div className="sm:col-span-3">
-                        <label htmlFor="frais" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="frais"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Frais
                         </label>
                         <div className="mt-2">
@@ -237,7 +257,10 @@ function Reservation() {
                         </div>
                       </div>
                       <div className="sm:col-span-3">
-                        <label htmlFor="nombrePlace" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label
+                          htmlFor="nombrePlace"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
                           Nombre Place
                         </label>
                         <div className="mt-2">
@@ -255,7 +278,10 @@ function Reservation() {
                   </div>
                 </div>
                 <div className="mt-6 flex items-center justify-end gap-x-6">
-                  <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                  <button
+                    type="button"
+                    className="text-sm font-semibold leading-6 text-gray-900"
+                  >
                     Annuler
                   </button>
                   <button
@@ -271,14 +297,17 @@ function Reservation() {
           {/* Blog2 */}
           <div className="w-full md:w-3/5 px-4 mb-4">
             <div className="neon bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-2 text-gray-800">Voyager c'est vivre</h2>
+              <h2 className="text-2xl font-bold mb-2 text-gray-800">
+                Voyager c'est vivre
+              </h2>
               <div className="flex justify-center mb-2">
                 <img src={logobody} alt="Logobody" className="w-32 h-32" />
               </div>
               <p className="text-gray-700">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates, nemo id quam, tempore esse fugit 
-                eos doloremque. Dolore illum quaerat iusto sunt laudantium omnis veniam enim cupiditate, assumenda autem
-                numquam.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptates, nemo id quam, tempore esse fugit eos doloremque.
+                Dolore illum quaerat iusto sunt laudantium omnis veniam enim
+                cupiditate, assumenda autem numquam.
               </p>
             </div>
           </div>

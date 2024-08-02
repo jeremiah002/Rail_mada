@@ -368,6 +368,115 @@ function Admin() {
                 </tbody>
               </table>
             </div>
+
+
+            <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
+              <h2 className="text-center font-semibold leading-7 text-gray-900">
+                Voyageurs
+              </h2>
+              <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
+                <thead className="bg-gray-100 dark:bg-gray-700">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Libelle
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Immatriculation
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Nb Place
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Frais
+                    </th>
+                    <th scope="col" className="p-4">
+                      <span className="sr-only">Edit</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      C-1
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                      T-001
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      50
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      5000
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                      <a
+                        href="#"
+                        className="text-blue-600 dark:text-blue-500 hover:underline"
+                      >
+                        Edit
+                      </a>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      C-2
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                      T-002
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      80
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      2000
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                      <a
+                        href="#"
+                        className="text-blue-600 dark:text-blue-500 hover:underline"
+                      >
+                        Edit
+                      </a>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      C-3
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                      T-003
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      100
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      1000
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                      <a
+                        href="#"
+                        className="text-blue-600 dark:text-blue-500 hover:underline"
+                      >
+                        Edit
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
           </div>
           <div className="w-full md:w-1/2 px-4 mb-4">
             <div className="neon bg-white p-6 rounded-lg shadow-lg">

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../App.css";
 import logo from "../assets/logo.png";
 import { createItineraire } from "../services/admin/itineraireApi";
+import { createTrain } from "../services/admin/trainApi";
 
 function Admin() {
 
@@ -21,15 +22,77 @@ function Admin() {
 
   const itineraireSubmit = async (e) => {
     e.preventDefault();
+    setFormDataItineraire({lieuDepart: '',
+                          lieuArrivee: '',
+                          jourDepart: '',
+                          heureDepart: '',
+                          codeItineraire: ''});
     try {
-      await createItineraire(formDataItineraire);
-      console.log('Réservation envoyée avec succès');
+      let response = await createItineraire(formDataItineraire);
+      if (response.status === 200){
+        console.log(response.data);
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   // Train
+
+  const [formDataTrain, setFormDataTrain] = useState({
+    immatriculation: '',
+    codeItineraire: '',
+  }); 
+
+  const handleChangeTrain = (e) => {
+    setFormDataTrain({ ...formDataTrain, [e.target.name]: e.target.value });
+  };
+
+  const TrainSubmit = async (e) => {
+    e.preventDefault();
+    setFormDataTrain({immatriculation: '',
+                      codeItineraire: ''});
+    try {
+      let response = await createTrain(formDataTrain);
+      if (response.status === 200){
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Categorie
+
+  const [formDataCategorie, setFormDataCategorie] = useState({
+    codeCategorie: '',
+    libelleCategorie: '',
+    nbPlaceSupporte: 1,
+    frais: 0,
+    immatriculation: '',
+  }); 
+
+  const handleChangeCategorie = (e) => {
+    setFormDataCategorie({ ...formDataCategorie, [e.target.name]: e.target.value });
+  };
+
+  const categorieSubmit = async (e) => {
+    e.preventDefault();
+    setFormDataCategorie({codeCategorie: '',
+                          libelleCategorie: '',
+                          nbPlaceSupporte: '',
+                          frais: '',
+                          immatriculation: '',});
+    try {
+      let response = await createCategorie(formDataCategorie);
+      if (response.status === 200){
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   return (
     <div>
@@ -509,7 +572,7 @@ function Admin() {
           <div className="w-full md:w-1/2 px-4 mb-4">
             <div className="neon bg-white p-6 rounded-lg shadow-lg">
                 <div className="space-y-12">
-                  <form>
+                  <form onSubmit={TrainSubmit}>
                     <div className="border-b border-gray-900/10 pb-12">
                       <h2 className="text-base font-semibold leading-7 text-gray-900">
                         Train
@@ -531,6 +594,7 @@ function Admin() {
                                 autoComplete="immatriculation"
                                 className="block w-full border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                 placeholder="T-001"
+                                onChange={handleChangeTrain}
                               />
                             </div>
                           </div>
@@ -549,6 +613,7 @@ function Admin() {
                               name="itineraire"
                               autoComplete="itineraire-name"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              onChange={handleChangeTrain}
                             >
                               <option>TNR</option>
                               <option>MKR</option>
@@ -575,7 +640,7 @@ function Admin() {
                     </div>
                   </form>
 
-                  <form>
+                  <form onSubmit={categorieSubmit}>
                     <div className="border-b border-gray-900/10 pb-12">
                       <h2 className="text-base font-semibold leading-7 text-gray-900">
                         Catégorie
@@ -597,6 +662,7 @@ function Admin() {
                                 autoComplete="classe"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                 placeholder="C-1"
+                                onChange={handleChangeCategorie}
                               />
                             </div>
                           </div>
@@ -618,6 +684,7 @@ function Admin() {
                                 autoComplete="immatriculation"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                 placeholder="T-001"
+                                onChange={handleChangeCategorie}
                               />
                             </div>
                           </div>
@@ -637,6 +704,7 @@ function Admin() {
                               id="nbPlace"
                               autoComplete="address-level2"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              onChange={handleChangeCategorie}
                             />
                           </div>
                         </div>
@@ -656,6 +724,7 @@ function Admin() {
                               autoComplete="address-level2"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               placeholder="Ariary"
+                              onChange={handleChangeCategorie}
                             />
                           </div>
                         </div>

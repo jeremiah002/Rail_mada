@@ -3,6 +3,7 @@ import "../App.css";
 import logo from "../assets/logo.png";
 import { createItineraire } from "../services/admin/itineraireApi";
 import { createTrain } from "../services/admin/trainApi";
+import { createCategorie } from "../services/admin/categorieApi";
 
 function Admin() {
 

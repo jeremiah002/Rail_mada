@@ -9,7 +9,7 @@ export async function auth(formData) {
         },
       });
       console.log(response.status, response.data);
-      return response.data;
+      return response;
     } catch (error) {
       console.log("Error: ", error);
       throw error;

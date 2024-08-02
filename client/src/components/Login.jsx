@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import "../App.css";
 import logo from "../assets/logo.png";
 import { auth } from "../services/authApi";
+import { useNavigate  } from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({ email: '', password: '' });
 
     const handleChange = (e) => {
@@ -17,7 +20,9 @@ function Login() {
       setFormData({ email: '', password: '' });
       try {
         const response = await auth(formData);
-        console.log(response);
+        if (response.status === 200) {
+            navigate("/admin");
+        }
       } catch (error) {
         console.error('Authentication failed:', error);
       }

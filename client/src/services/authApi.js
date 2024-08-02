@@ -2,9 +2,10 @@ import axios from "axios";
 
 export async function auth(formData) {
     try {
-      const response = await axios.post(`https://none`, formData, {
+      let data = JSON.stringify(formData);
+      const response = await axios.post(`http://localhost:5193/api/auth/login`, data, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
       console.log(response.status, response.data);

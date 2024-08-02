@@ -75,7 +75,7 @@ function Home() {
               <ul className="list-reset lg:flex justify-end flex-1 items-center">
                 <li className="mr-3">
                   <Link
-                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/home' ? 'font-bold' : ''}`}
+                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/' ? 'font-bold' : ''}`}
                   to="/"
                     id="acc"
                     style={{ color: scrolled ? "black" : "white" }}

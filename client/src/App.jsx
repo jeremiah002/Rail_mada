@@ -8,7 +8,7 @@ import Admin from './components/Admin';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/admin/login',
     element: <Login/>
   },
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     element: <Admin/>
   },
   {
-    path: '/home',
+    path: '/',
     element: <Home/>
   },
   {

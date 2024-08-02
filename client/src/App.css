@@ -6,6 +6,16 @@
                 0 0 4px #fff,
                 0 0 6px rgba(0, 77, 177, 0.438)
 }
+.neoni {
+    box-shadow: 0 0 1px #153349,
+                0 0 8px rgb(13, 32, 56),
+                0 0 14px rgb(6, 21, 60)
+}
+.neonih {
+    box-shadow: 0 0 1px #35434d,
+                0 0 8px rgb(46, 53, 62),
+                0 0 14px rgb(38, 43, 56)
+}
 .fade-enter {
     opacity: 0;
     transform: translateX(20%);

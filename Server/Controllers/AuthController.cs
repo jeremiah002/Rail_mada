@@ -10,7 +10,6 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
     public class authController(IConfiguration configuration) : ControllerBase
     {
         private readonly IConfiguration _configuration = configuration;

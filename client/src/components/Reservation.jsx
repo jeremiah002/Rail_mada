@@ -46,9 +46,9 @@ function Reservation() {
               <li className="mr-3">
                 <Link
                   className={`inline-block py-2 px-4 no-underline ${
-                    location.pathname === "/" ? "font-bold" : ""
+                    location.pathname === "/home" ? "font-bold" : ""
                   }`}
-                  to="/"
+                  to="/home"
                   id="acc"
                 >
                   Acceuil
@@ -57,10 +57,10 @@ function Reservation() {
               <li className="mr-3">
                 <Link
                   className={`inline-block py-2 px-4 no-underline ${
-                    location.pathname === "/resa" ? "font-bold" : ""
+                    location.pathname === "/reservation" ? "font-bold" : ""
                   }`}
-                  id="resa"
-                  to="/resa"
+                  id="reservation"
+                  to="/reservation"
                 >
                   Reservation
                 </Link>

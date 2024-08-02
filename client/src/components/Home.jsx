@@ -75,7 +75,7 @@ function Home() {
               <ul className="list-reset lg:flex justify-end flex-1 items-center">
                 <li className="mr-3">
                   <Link
-                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/' ? 'font-bold' : ''}`}
+                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/home' ? 'font-bold' : ''}`}
                   to="/"
                     id="acc"
                     style={{ color: scrolled ? "black" : "white" }}
@@ -85,9 +85,9 @@ function Home() {
                 </li>
                 <li className="mr-3">
                   <Link
-                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/resa' ? 'font-bold' : ''}`}
-                  id="resa"
-                    to="/resa"
+                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/reservation' ? 'font-bold' : ''}`}
+                  id="reservation"
+                    to="/reservation"
                     style={{ color: scrolled ? "black" : "white" }}
                   >
                     Reservation
@@ -100,7 +100,7 @@ function Home() {
                   scrolled ? "gradient text-white" : "bg-white text-gray-800"
                 } mx-auto lg:mx-0 hover:underline font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
               `}
-              onClick={() => navigate('/resa')}
+              onClick={() => navigate('/reservation')}
               >
                 Reserver
               </button>
@@ -112,18 +112,6 @@ function Home() {
             } opacity-25 my-0 py-0`}
           />
         </nav>
-
-
-
-
-
-
-
-
-
-
-
-
         <div className="pt-24">
           <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
             <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
@@ -137,7 +125,7 @@ function Home() {
                 Votre billets de train en quelques clics, pour des voyages
                 faciles et abordables !
               </p>
-              <button className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out" onClick={() => navigate('/resa')}>
+              <button className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out" onClick={() => navigate('/reservation')}>
                 Aller
               </button>
             </div>
@@ -427,7 +415,7 @@ function Home() {
           <h3 className="my-4 text-3xl leading-tight">
             Éviter de vous déplacer en achetant vos billets en ligne.
           </h3>
-          <button className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out" onClick={() => navigate('/resa')}>
+          <button className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out" onClick={() => navigate('/reservation')}>
             Reserver
           </button>
         </section>

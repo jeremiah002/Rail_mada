@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import logo from "../assets/logo.png";
-import { createItineraire } from "../services/admin/itineraireApi";
+import { createItineraire, getItineraires } from "../services/admin/itineraireApi";
 import { createTrain, getTrains } from "../services/admin/trainApi";
-import { createCategorie } from "../services/admin/categorieApi";
+import { createCategorie, getCategories } from "../services/admin/categorieApi";
+import { getVoyageurs } from "../services/reservationApi";
 
 function Admin() {
   // Itineraire controller
@@ -21,6 +22,16 @@ function Admin() {
       ...formDataItineraire,
       [e.target.name]: e.target.value,
     });
+  };
+
+  useEffect(() => {
+    fetchItineraires();
+  }, []);
+  const [itineraires, setItineraires] = useState([]);
+  const fetchItineraires = async () => {
+    const itinerairesData = await getItineraires();
+    console.log(itinerairesData);
+    setItineraires(itinerairesData);
   };
 
   const itineraireSubmit = async (e) => {
@@ -86,6 +97,16 @@ function Admin() {
     immatriculation: "",
   });
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+  const [categories, setCategories] = useState([]);
+  const fetchCategories = async () => {
+    const categoriesData = await getCategories();
+    console.log(categoriesData);
+    setCategories(categoriesData);
+  };
+
   const handleChangeCategorie = (e) => {
     setFormDataCategorie({
       ...formDataCategorie,
@@ -110,6 +131,18 @@ function Admin() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  // Voyageur
+
+  useEffect(() => {
+    fetchVoyageurs();
+  }, []);
+  const [voyageurs, setVoyageurs] = useState([]);
+  const fetchVoyageurs = async () => {
+    const voyageursData = await getVoyageurs();
+    console.log(voyageursData);
+    setVoyageurs(voyageursData);
   };
 
   return (
@@ -230,6 +263,7 @@ function Admin() {
               </table>
             </div>
 
+
             <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Catégorie
@@ -267,18 +301,20 @@ function Admin() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                {categories.length !== 0 ? (
+                    categories.map((categorie) => (
+                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700" key={categorie.codeCategorie}>
                     <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      C-1
+                      {categorie.libelleCategorie}
                     </td>
                     <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      T-001
+                      {categorie.immatriculation}
                     </td>
                     <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      50
+                      {categorie.nbPlaceSupporte}
                     </td>
                     <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      5000
+                      {categorie.frais}
                     </td>
                     <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
                       <a
@@ -289,53 +325,17 @@ function Admin() {
                       </a>
                     </td>
                   </tr>
-                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    ))) : (
+                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
                     <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      C-2
+                      AUCUN CATEGORIE
                     </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      T-002
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      80
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      2000
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      C-3
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      T-003
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      100
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      1000
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
+                    </tr>
+                    )}
                 </tbody>
               </table>
             </div>
+
 
             <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
@@ -380,84 +380,45 @@ function Admin() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                {itineraires.length !== 0 ? (
+                    itineraires.map((itineraire) => (
+                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700" key={itineraire.codeItineraire}>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                        {itineraire.lieuDepart}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                        {itineraire.lieuArrivee}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      {itineraire.codeItineraire}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      {itineraire.jourDepart}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      {itineraire.heureDepart}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                        <a
+                          href="#"
+                          className="text-blue-600 dark:text-blue-500 hover:underline"
+                        >
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    ))) : (
+                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
                     <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      Tana
+                      AUCUN ITINERAIRE
                     </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      Fianar
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      WFI
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      Lundi
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      07:30
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      Ambila
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      Tmtv
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      ATV
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      Mercredi
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      08:00
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      Mnkr
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      Fianar
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      WFM
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      Vendredi
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      07:00
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
+                    </tr>
+                    )}
+                    
                 </tbody>
               </table>
             </div>
+
 
             <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
@@ -496,72 +457,41 @@ function Admin() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                {voyageurs.length !== 0 ? (
+                    voyageurs.map((voyageur) => (
+                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700" key={voyageur.codevoyageur}>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                        {voyageur.lieuDepart}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                        {voyageur.lieuArrivee}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      {voyageur.codevoyageur}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      {voyageur.jourDepart}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      {voyageur.heureDepart}
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                        <a
+                          href="#"
+                          className="text-blue-600 dark:text-blue-500 hover:underline"
+                        >
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    ))) : (
+                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
                     <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      C-1
+                      AUCUN VOYAGEUR
                     </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      T-001
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      50
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      5000
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      C-2
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      T-002
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      80
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      2000
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      C-3
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                      T-003
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      100
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                      1000
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
+                    </tr>
+                    )}
+                   
                 </tbody>
               </table>
             </div>

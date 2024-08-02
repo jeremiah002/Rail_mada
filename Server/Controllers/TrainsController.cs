@@ -10,7 +10,7 @@ namespace Server.Controllers
     [Route("api/v1/[controller]")]
     [Authorize(Roles = "Admin")]
     // Contrôleur pour gérer les opérations sur les trains
-    public class TrainsController(AppDbContext context) : ControllerBase
+    public class trainsController(AppDbContext context) : ControllerBase
     {
         // Initialisation du contexte de la base de données
         private readonly AppDbContext _context = context;

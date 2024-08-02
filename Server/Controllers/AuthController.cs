@@ -21,7 +21,7 @@ namespace Server.Controllers
             string? keyConfig = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("Les paramètres JWT ne sont pas configurés correctement.");
 
             if (model.Email != "railsmada@gmail.com" || model.Password != "12345678")
-                return Unauthorized();
+                return Unauthorized("Email ou mot de passe incorrecte !");
 
             var claims = new[]
             {

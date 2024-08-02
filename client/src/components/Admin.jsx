@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import "../App.css";
 import logo from "../assets/logo.png";
+import { createItineraire } from "../services/admin/itineraireApi";
 
 function Admin() {
+
+  // Itineraire controller
+
+  const [formDataItineraire, setFormDataItineraire] = useState({
+    lieuDepart: '',
+    lieuArrivee: '',
+    jourDepart: '',
+    heureDepart: '',
+    codeItineraire: '',
+  }); 
+
+  const handleChangeItineraire = (e) => {
+    setFormDataItineraire({ ...formDataItineraire, [e.target.name]: e.target.value });
+  };
+
+  const itineraireSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await createItineraire(formDataItineraire);
+      console.log('Réservation envoyée avec succès');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Train
+
   return (
     <div>
       <nav id="header" className="fixed w-full z-30 top-0 text-white gradient">
@@ -480,7 +508,6 @@ function Admin() {
           </div>
           <div className="w-full md:w-1/2 px-4 mb-4">
             <div className="neon bg-white p-6 rounded-lg shadow-lg">
-              <form>
                 <div className="space-y-12">
                   <form>
                     <div className="border-b border-gray-900/10 pb-12">
@@ -556,7 +583,7 @@ function Admin() {
                       <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-4">
                           <label
-                            for="classe"
+                            htmlFor="classe"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
                             Libelle classe
@@ -567,7 +594,7 @@ function Admin() {
                                 type="text"
                                 name="classe"
                                 id="classe"
-                                autocomplete="classe"
+                                autoComplete="classe"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                 placeholder="C-1"
                               />
@@ -577,7 +604,7 @@ function Admin() {
 
                         <div className="sm:col-span-4">
                           <label
-                            for="immatriculation"
+                            htmlFor="immatriculation"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
                             Immatriculation
@@ -588,7 +615,7 @@ function Admin() {
                                 type="text"
                                 name="immatriculation"
                                 id="immatriculation"
-                                autocomplete="immatriculation"
+                                autoComplete="immatriculation"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                 placeholder="T-001"
                               />
@@ -598,7 +625,7 @@ function Admin() {
 
                         <div className="sm:col-span-2 sm:col-start-1">
                           <label
-                            for="nbPlace"
+                            htmlFor="nbPlace"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
                             Nombre Place
@@ -608,7 +635,7 @@ function Admin() {
                               type="number"
                               name="nbPlace"
                               id="nbPlace"
-                              autocomplete="address-level2"
+                              autoComplete="address-level2"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                           </div>
@@ -616,7 +643,7 @@ function Admin() {
 
                         <div className="sm:col-span-2">
                           <label
-                            for="frais"
+                            htmlFor="frais"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
                             Frais
@@ -626,7 +653,7 @@ function Admin() {
                               type="number"
                               name="frais"
                               id="frais"
-                              autocomplete="address-level2"
+                              autoComplete="address-level2"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               placeholder="Ariary"
                             />
@@ -651,7 +678,7 @@ function Admin() {
                     </div>
                   </form>
 
-                  <form>
+                  <form onSubmit={itineraireSubmit}>
                     <div className="border-b border-gray-900/10 pb-12">
                       <h2 className="text-base font-semibold leading-7 text-gray-900">
                         Itinéraire
@@ -659,7 +686,7 @@ function Admin() {
                       <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-2 sm:col-start-1">
                           <label
-                            for="depart"
+                            htmlFor="depart"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
                             Départ
@@ -667,18 +694,19 @@ function Admin() {
                           <div className="mt-2">
                             <input
                               type="text"
-                              name="depart"
+                              name="lieuDepart"
                               id="depart"
-                              autocomplete="address-level2"
+                              autoComplete="address-level2"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              placeholder="lieu"
+                              placeholder="lieu de depart"
+                              onChange={handleChangeItineraire}
                             />
                           </div>
                         </div>
 
                         <div className="sm:col-span-2">
                           <label
-                            for="destination"
+                            htmlFor="destination"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
                             Destination
@@ -686,18 +714,19 @@ function Admin() {
                           <div className="mt-2">
                             <input
                               type="text"
-                              name="destination"
+                              name="lieuArrivee"
                               id="destination"
-                              autocomplete="address-level2"
+                              autoComplete="address-level2"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               placeholder="lieu"
+                              onChange={handleChangeItineraire}
                             />
                           </div>
                         </div>
 
                         <div className="sm:col-span-4">
                           <label
-                            for="itineraire"
+                            htmlFor="itineraire"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
                             Code Itinéraire
@@ -706,11 +735,12 @@ function Admin() {
                             <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                               <input
                                 type="text"
-                                name="itineraire"
+                                name="codeItineraire"
                                 id="itineraire"
-                                autocomplete="itineraire"
+                                autoComplete="itineraire"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                placeholder="TNR"
+                                placeholder="Code Itineraire"
+                                onChange={handleChangeItineraire}
                               />
                             </div>
                           </div>
@@ -718,7 +748,7 @@ function Admin() {
                         <br />
                         <div className="sm:col-span-2">
                           <label
-                            for="jourDepart"
+                            htmlFor="jourDepart"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
                             Jour
@@ -727,22 +757,24 @@ function Admin() {
                             <select
                               id="jourDepart"
                               name="jourDepart"
-                              autocomplete="jourDepart-name"
-                              className="block w-full rounded-md h-9 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                              <option>Dimanche</option>
-                              <option>Lundi</option>
-                              <option>Mardi</option>
-                              <option>Mercredi</option>
-                              <option>Jeudi</option>
-                              <option>Vendredi</option>
-                              <option>Samedi</option>
+                              autoComplete="jourDepart-name"
+                              className="block w-full rounded-md h-9 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                              onChange={handleChangeItineraire}>
+                              <option value="">Jour Depart</option>
+                              <option value="dimanche">Dimanche</option>
+                              <option value="lundi">Lundi</option>
+                              <option value="mardi">Mardi</option>
+                              <option value="mercredi">Mercredi</option>
+                              <option value="jeudi">Jeudi</option>
+                              <option value="vendredi">Vendredi</option>
+                              <option value="samedi">Samedi</option>
                             </select>
                           </div>
                         </div>
 
                         <div className="sm:col-span-2">
                           <label
-                            for="time"
+                            htmlFor="time"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
                             Heure
@@ -751,9 +783,10 @@ function Admin() {
                             <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                               <input
                                 type="time"
-                                name="time"
+                                name="heureDepart"
                                 id="time"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6"
+                                onChange={handleChangeItineraire}
                               />
                             </div>
                           </div>
@@ -777,7 +810,6 @@ function Admin() {
                     </div>
                   </form>
                 </div>
-              </form>
             </div>
           </div>
         </div>

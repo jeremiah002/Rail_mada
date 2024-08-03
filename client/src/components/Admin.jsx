@@ -5,8 +5,9 @@ import {
   createItineraire,
   getItineraires,
   deleteItineraire,
+  editItineraire
 } from "../services/admin/itineraireApi";
-import { createTrain, getTrains } from "../services/admin/trainApi";
+import { createTrain, getTrains, editTrain, deleteTrain } from "../services/admin/trainApi";
 import { createCategorie, getCategories } from "../services/admin/categorieApi";
 import { getVoyageurs } from "../services/reservationApi";
 import { useNavigate } from "react-router-dom";
@@ -30,7 +31,7 @@ function Admin() {
     });
   };
 
-  // le formulaire avec les données de l'itinéraire sélectionné
+  const [isEditing, setIsEditing] = useState(false);
   const [selectedItinerary, setSelectedItinerary] = useState(null);
   const editItineraryForm = (itineraire) => {
     setIsEditing(true);
@@ -54,11 +55,11 @@ function Admin() {
 
   const deleteCurrentItinerary = async () => {
     try {
-      const response = await deleteItineraire(selectedItinerary.codeItineraire); // Assurez-vous que votre fonction deleteItineraire prend l'ID ou le code de l'itinéraire à supprimer
+      const response = await deleteItineraire(selectedItinerary.codeItineraire);
       if (response.status === 200) {
         console.log(response.data);
         setIsEditing(false); // Sortir du mode d'édition après suppression
-        fetchItineraires(); // Récupérer les données mises à jour
+        fetchItineraires(); // maj
       }
     } catch (error) {
       console.error(error);
@@ -71,11 +72,19 @@ function Admin() {
     try {
       let response;
       if (isEditing) {
-        response = await editItineraire(formDataItineraire, selectedItinerary.codeItineraire); // Assurez-vous que votre fonction editItineraire prend en compte l'ID ou le code de l'itinéraire à modifier
+        response = await editItineraire(selectedItinerary.codeItineraire, formDataItineraire);
+        console.log(formDataItineraire);
       } else {
         response = await createItineraire(formDataItineraire);
       }
       if (response.status === 200) {
+        setFormDataItineraire({
+          lieuDepart: "",
+          lieuArrivee: "",
+          jourDepart: "",
+          heureDepart: "",
+          codeItineraire: "",
+        });
       console.log(response.data);
       setIsEditing(false); // Réinitialiser le mode d'édition après la soumission
       fetchItineraires(); // Récupérer les données mises à jour
@@ -92,6 +101,18 @@ function Admin() {
     codeItineraire: "",
   });
 
+  const [isEditingTrain, setIsEditingTrain] = useState(false);
+  const [selectedTrain, setSelectedTrain] = useState(null);
+  const editTrainForm = (train) => {
+    setIsEditingTrain(true);
+    setSelectedTrain(train);
+    setFormDataTrain({
+      immatriculation: train.immatriculation,
+      codeItineraire: train.codeItineraire
+    });
+    handleChangeTrain();
+  };
+
   const [trains, setTrains] = useState([]);
   const fetchTrains = async () => {
     const trainsData = await getTrains();
@@ -100,16 +121,41 @@ function Admin() {
   };
 
   const handleChangeTrain = (e) => {
-    setFormDataTrain({ ...formDataTrain, [e.target.name]: e.target.value });
+    setFormDataTrain({ ...formDataTrain, [immatriculation]: formDataTrain.immatriculation, [codeItineraire]: formDataTrain.codeItineraire });
   };
 
-  const TrainSubmit = async (e) => {
+  const trainSubmit = async (e) => {
     e.preventDefault();
-    setFormDataTrain({ immatriculation: "", codeItineraire: "" });
+   
     try {
-      let response = await createTrain(formDataTrain);
+      let response;
+      if (isEditingTrain) {
+        response = await editTrain(selectedTrain.immatriculation, formDataTrain);
+        console.log(formDataTrain);
+      } else {
+        response = await createTrain(formDataTrain);
+      }
+      if (response.status === 200) {
+        setFormDataTrain({
+          immatriculation: "",
+          codeItineraire: ""
+        });
+      console.log(response.data);
+      setIsEditingTrain(false); // Réinitialiser le mode d'édition après la soumission
+      fetchTrains(); // Récupérer les données mises à jour
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteCurrentTrain = async () => {
+    try {
+      const response = await deleteTrain(selectedTrain.immatriculation);
       if (response.status === 200) {
         console.log(response.data);
+        setIsEditingTrain(false); // Sortir du mode d'édition après suppression
+        fetchTrains(); // maj
       }
     } catch (error) {
       console.error(error);
@@ -291,6 +337,7 @@ function Admin() {
                           <a
                             href="#"
                             className="text-blue-600 dark:text-blue-500 hover:underline"
+                            onClick={() => editTrainForm(train)}
                           >
                             Edit
                           </a>
@@ -570,7 +617,7 @@ function Admin() {
           <div className="w-full md:w-1/2 px-4 mb-4">
             <div className="neon bg-white p-6 rounded-lg shadow-lg">
               <div className="space-y-12">
-                <form onSubmit={TrainSubmit}>
+                <form onSubmit={trainSubmit}>
                   <div className="border-b border-gray-900/10 pb-12">
                     <h2 className="text-base font-semibold leading-7 text-gray-900">
                       Train
@@ -588,8 +635,8 @@ function Admin() {
                             <input
                               type="text"
                               name="immatriculation"
+                              value={formDataTrain.immatriculation}
                               id="immatriculation"
-                              autoComplete="immatriculation"
                               className="block w-full border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                               placeholder="Immatriculation du Train"
                               onChange={handleChangeTrain}
@@ -608,8 +655,8 @@ function Admin() {
                         <div className="mt-2">
                           <select
                             id="itineraire"
-                            name="itineraire"
-                            autoComplete="itineraire-name"
+                            name="codeItineraire"
+                            value={formDataTrain.codeItineraire}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             onChange={handleChangeTrain}
                           >
@@ -638,11 +685,16 @@ function Admin() {
                     >
                       Annuler
                     </button>
+                    {isEditingTrain && (
+                      <button type="button" onClick={deleteCurrentTrain}>
+                        Supprimer
+                      </button>
+                    )}
                     <button
                       type="submit"
                       className="rounded-md gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                      Ajouter
+                      {isEditingTrain ? "Modifier" : "Ajouter"}
                     </button>
                   </div>
                 </form>
@@ -771,6 +823,7 @@ function Admin() {
                           <input
                             type="text"
                             name="lieuDepart"
+                            value={formDataItineraire.lieuDepart}
                             id="depart"
                             autoComplete="address-level2"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -791,6 +844,7 @@ function Admin() {
                           <input
                             type="text"
                             name="lieuArrivee"
+                            value={formDataItineraire.lieuArrivee}
                             id="destination"
                             autoComplete="address-level2"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -812,6 +866,7 @@ function Admin() {
                             <input
                               type="text"
                               name="codeItineraire"
+                              value={formDataItineraire.codeItineraire}
                               id="itineraire"
                               autoComplete="itineraire"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -833,6 +888,7 @@ function Admin() {
                           <select
                             id="jourDepart"
                             name="jourDepart"
+                            value={formDataItineraire.jourDepart}
                             autoComplete="jourDepart-name"
                             className="block w-full rounded-md h-9 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                             onChange={handleChangeItineraire}
@@ -860,7 +916,7 @@ function Admin() {
                           <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                             <input
                               type="time"
-                              defaultValue={"00:00"}
+                              value={formDataItineraire.heureDepart}
                               name="heureDepart"
                               id="time"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6"
@@ -882,6 +938,7 @@ function Admin() {
                         heureDepart: "00:00",
                         codeItineraire: "",
                       });
+                      handleChangeItineraire();
                     }}>
                       Annuler
                     </button>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import logo from "../assets/logo.png";
-import { createItineraire, getItineraires, deleteItineraire } from "../services/admin/itineraireApi";
+import { createItineraire, getItineraires, deleteItineraire, editItineraire } from "../services/admin/itineraireApi";
 import { createTrain, getTrains } from "../services/admin/trainApi";
 import { createCategorie, getCategories } from "../services/admin/categorieApi";
 import { getVoyageurs } from "../services/reservationApi";
@@ -24,9 +24,26 @@ function Admin() {
     });
   };
 
+  // le formulaire avec les données de l'itinéraire sélectionné
+  const [selectedItinerary, setSelectedItinerary] = useState(null);
+  const editItineraryForm = (itineraire) => {
+    setIsEditing(true);
+    setSelectedItinerary(itineraire);
+    setFormDataItineraire({
+      lieuDepart: itineraire.lieuDepart,
+      lieuArrivee: itineraire.lieuArrivee,
+      jourDepart: itineraire.jourDepart,
+      heureDepart: itineraire.heureDepart,
+      codeItineraire: itineraire.codeItineraire,
+    });
+  };
+ 
+
   useEffect(() => {
     fetchItineraires();
   }, []);
+  const [isEditing, setIsEditing] = useState(false);
+  
   const [itineraires, setItineraires] = useState([]);
   const fetchItineraires = async () => {
     const itinerairesData = await getItineraires();
@@ -34,19 +51,33 @@ function Admin() {
     setItineraires(itinerairesData);
   };
 
-  const itineraireSubmit = async (e) => {
-    e.preventDefault();
-    setFormDataItineraire({
-      lieuDepart: "",
-      lieuArrivee: "",
-      jourDepart: "",
-      heureDepart: "",
-      codeItineraire: "",
-    });
+  const deleteCurrentItinerary = async () => {
     try {
-      let response = await createItineraire(formDataItineraire);
+      const response = await deleteItineraire(selectedItinerary.codeItineraire); // Assurez-vous que votre fonction deleteItineraire prend l'ID ou le code de l'itinéraire à supprimer
       if (response.status === 200) {
         console.log(response.data);
+        setIsEditing(false); // Sortir du mode d'édition après suppression
+        fetchItineraires(); // Récupérer les données mises à jour
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const itineraireSubmit = async (e) => {
+    e.preventDefault();
+   
+    try {
+      let response;
+      if (isEditing) {
+        response = await editItineraire(formDataItineraire, selectedItinerary.codeItineraire); // Assurez-vous que votre fonction editItineraire prend en compte l'ID ou le code de l'itinéraire à modifier
+      } else {
+        response = await createItineraire(formDataItineraire);
+      }
+      if (response.status === 200) {
+      console.log(response.data);
+      setIsEditing(false); // Réinitialiser le mode d'édition après la soumission
+      fetchItineraires(); // Récupérer les données mises à jour
       }
     } catch (error) {
       console.error(error);
@@ -145,7 +176,7 @@ function Admin() {
   });
 
   useEffect(() => {
-    fetchVoyageurs();
+    
   }, []);
   const [voyageurs, setVoyageurs] = useState([]);
   const fetchVoyageurs = async () => {
@@ -422,6 +453,7 @@ function Admin() {
                           <a
                             href="#"
                             className="text-blue-600 dark:text-blue-500 hover:underline"
+                            onClick={() => editItineraryForm(itineraire)}
                           >
                             Edit
                           </a>
@@ -596,7 +628,7 @@ function Admin() {
                       type="button"
                       className="text-sm font-semibold leading-6 text-gray-900"
                     >
-                      Supprimer
+                      Annuler
                     </button>
                     <button
                       type="submit"
@@ -703,7 +735,7 @@ function Admin() {
                       type="button"
                       className="text-sm font-semibold leading-6 text-gray-900"
                     >
-                      Supprimer
+                      Annuler
                     </button>
                     <button
                       type="submit"
@@ -833,17 +865,28 @@ function Admin() {
                   </div>
 
                   <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button
-                      type="button"
-                      className="text-sm font-semibold leading-6 text-gray-900"
-                    >
-                      Supprimer
+                    <button type="button" onClick={() => {
+                      setIsEditing(false);
+                      setFormDataItineraire({
+                        lieuDepart: "",
+                        lieuArrivee: "",
+                        jourDepart: "",
+                        heureDepart: "00:00",
+                        codeItineraire: "",
+                      });
+                    }}>
+                      Annuler
                     </button>
+                    {isEditing && (
+                      <button type="button" onClick={deleteCurrentItinerary}>
+                        Supprimer
+                      </button>
+                    )}
                     <button
                       type="submit"
                       className="rounded-md gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                      Ajouter
+                      {isEditing ? "Modifier" : "Ajouter"}
                     </button>
                   </div>
                 </form>

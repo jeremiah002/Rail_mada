@@ -8,7 +8,7 @@ import {
   editItineraire
 } from "../services/admin/itineraireApi";
 import { createTrain, getTrains, editTrain, deleteTrain } from "../services/admin/trainApi";
-import { createCategorie, getCategories } from "../services/admin/categorieApi";
+import { createCategorie, deleteCategorie, editCategorie, getCategories } from "../services/admin/categorieApi";
 import { getVoyageurs } from "../services/reservationApi";
 import { useNavigate } from "react-router-dom";
 
@@ -101,17 +101,7 @@ function Admin() {
     codeItineraire: "",
   });
 
-  const [isEditingTrain, setIsEditingTrain] = useState(false);
-  const [selectedTrain, setSelectedTrain] = useState(null);
-  const editTrainForm = (train) => {
-    setIsEditingTrain(true);
-    setSelectedTrain(train);
-    setFormDataTrain({
-      immatriculation: train.immatriculation,
-      codeItineraire: train.codeItineraire
-    });
-    handleChangeTrain();
-  };
+  
 
   const [trains, setTrains] = useState([]);
   const fetchTrains = async () => {
@@ -122,6 +112,17 @@ function Admin() {
 
   const handleChangeTrain = (e) => {
     setFormDataTrain({ ...formDataTrain, [e.target.name]: e.target.value });
+  };
+
+  const [isEditingTrain, setIsEditingTrain] = useState(false);
+  const [selectedTrain, setSelectedTrain] = useState(null);
+  const editTrainForm = (train) => {
+    setIsEditingTrain(true);
+    setSelectedTrain(train);
+    setFormDataTrain({
+      immatriculation: train.immatriculation,
+      codeItineraire: train.codeItineraire
+    });
   };
 
   const trainSubmit = async (e) => {
@@ -186,24 +187,61 @@ function Admin() {
     });
   };
 
+  const [isEditingCategorie, setIsEditingCategorie] = useState(false);
+  const [selectedCategorie, setSelectedCategorie] = useState(null);
+  const editCategorieForm = (categorie) => {
+    setIsEditingCategorie(true);
+    setSelectedCategorie(categorie);
+    setFormDataCategorie({
+      codeCategorie: categorie.codeCategorie,
+      libelleCategorie: categorie.libelleCategorie,
+      nbPlaceSupporte: categorie.nbPlaceSupporte,
+      frais: categorie.frais,
+      immatriculation: categorie.immatriculation,
+    });
+  };
+
   const categorieSubmit = async (e) => {
     e.preventDefault();
-    setFormDataCategorie({
-      codeCategorie: "",
-      libelleCategorie: "",
-      nbPlaceSupporte: "",
-      frais: "",
-      immatriculation: "",
-    });
+   
     try {
-      let response = await createCategorie(formDataCategorie);
+      let response;
+      if (isEditingCategorie) {
+        response = await editCategorie(selectedCategorie.codeCategorie, formDataCategorie);
+        console.log(formDataCategorie);
+      } else {
+        response = await createCategorie(formDataCategorie);
+      }
       if (response.status === 200) {
-        console.log(response.data);
+        setFormDataCategorie({
+          codeCategorie: "",
+          libelleCategorie: "",
+          nbPlaceSupporte: "",
+          frais: "",
+          immatriculation: "",
+        });
+      console.log(response.data);
+      setIsEditingCategorie(false); // Réinitialiser le mode d'édition après la soumission
+      fetchCategories(); // Récupérer les données mises à jour
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  const deleteCurrentCategorie = async () => {
+    try {
+      const response = await deleteCategorie(selectedCategorie.codeCategorie);
+      if (response.status === 200) {
+        console.log(response.data);
+        setIsEditingCategorie(false); // Sortir du mode d'édition après suppression
+        fetchCategories(); // maj
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   // Voyageur
 
@@ -417,6 +455,7 @@ function Admin() {
                           <a
                             href="#"
                             className="text-blue-600 dark:text-blue-500 hover:underline"
+                            onClick={() => editCategorieForm(categorie)}
                           >
                             Edit
                           </a>
@@ -684,11 +723,29 @@ function Admin() {
                     <button
                       type="button"
                       className="text-sm font-semibold leading-6 text-gray-900"
+                      onClick={() => {
+                        setIsEditingTrain(false);
+                        setFormDataTrain({
+                          immatriculation: "",
+                          codeItineraire: "",
+                        });
+                        handleChangeTrain();
+                      }}
                     >
                       Annuler
                     </button>
                     {isEditingTrain && (
-                      <button type="button" onClick={deleteCurrentTrain}>
+                      <button type="button" 
+                      onClick={() => {
+                        setIsEditingTrain(false);
+                        deleteCurrentTrain;
+                        setFormDataTrain({
+                          immatriculation: "",
+                          codeItineraire: "",
+                        });
+                        handleChangeTrain();
+                      }}
+                      >
                         Supprimer
                       </button>
                     )}
@@ -707,6 +764,30 @@ function Admin() {
                       Catégorie
                     </h2>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+                    <div className="sm:col-span-4">
+                        <label
+                          htmlFor="classe"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Code Categorie
+                        </label>
+                        <div className="mt-2">
+                          <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                            <input
+                              type="text"
+                              name="codeCategorie"
+                              value={formDataCategorie.codeCategorie}
+                              id="codeCategorie"
+                              autoComplete="codeCategorie"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                              placeholder="Code Categorie"
+                              onChange={handleChangeCategorie}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
                       <div className="sm:col-span-4">
                         <label
                           htmlFor="classe"
@@ -718,11 +799,12 @@ function Admin() {
                           <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                             <input
                               type="text"
-                              name="classe"
-                              id="classe"
+                              name="libelleCategorie"
+                              value={formDataCategorie.libelleCategorie}
+                              id="libelleCategorie"
                               autoComplete="classe"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                              placeholder="C-1"
+                              placeholder="Libelle Classe"
                               onChange={handleChangeCategorie}
                             />
                           </div>
@@ -738,15 +820,27 @@ function Admin() {
                         </label>
                         <div className="mt-2">
                           <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <input
-                              type="text"
-                              name="immatriculation"
-                              id="immatriculation"
-                              autoComplete="immatriculation"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                              placeholder="T-001"
-                              onChange={handleChangeCategorie}
-                            />
+                            <select
+                            id="immatriculation"
+                            name="immatriculation"
+                            value={formDataCategorie.immatriculation}
+                            autoComplete="immatriculation"
+                            className="pl-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            onChange={handleChangeCategorie}
+                          ><option value=""></option>
+                            {trains.length !== 0 ? (
+                              trains.map((train) => (
+                                <option
+                                  key={train.immatriculation}
+                                  value={train.immatriculation}
+                                >
+                                  {train.immatriculation}
+                                </option>
+                              ))
+                            ) : (
+                              <option value=""></option>
+                            )}
+                          </select>
                           </div>
                         </div>
                       </div>
@@ -761,8 +855,9 @@ function Admin() {
                         <div className="mt-2">
                           <input
                             type="number"
-                            name="nbPlace"
-                            id="nbPlace"
+                            name="nbPlaceSupporte"
+                            value={formDataCategorie.nbPlaceSupporte}
+                            id="nbPlaceSupporte"
                             autoComplete="address-level2"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             onChange={handleChangeCategorie}
@@ -781,6 +876,7 @@ function Admin() {
                           <input
                             type="number"
                             name="frais"
+                            value={formDataCategorie.frais}
                             id="frais"
                             autoComplete="address-level2"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -796,14 +892,43 @@ function Admin() {
                     <button
                       type="button"
                       className="text-sm font-semibold leading-6 text-gray-900"
+                      onClick={() => {
+                        setIsEditingCategorie(false);
+                        setFormDataCategorie({
+                          codeCategorie: "",
+                          libelleCategorie: "",
+                          nbPlaceSupporte: "",
+                          frais: "",
+                          immatriculation: "",
+                        });
+                        handleChangeCategorie();
+                      }}
                     >
                       Annuler
                     </button>
+                    {isEditingCategorie && (
+                      <button type="button" 
+                      onClick={() => {
+                        setIsEditingCategorie(false);
+                        deleteCurrentCategorie;
+                        setFormDataCategorie({
+                          codeCategorie: "",
+                          libelleCategorie: "",
+                          nbPlaceSupporte: "",
+                          frais: "",
+                          immatriculation: "",
+                        });
+                        handleChangeCategorie();
+                      }}
+                      >
+                        Supprimer
+                      </button>
+                    )}
                     <button
                       type="submit"
                       className="rounded-md gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                      Ajouter
+                      {isEditingCategorie ? "Modifier" : "Ajouter"}
                     </button>
                   </div>
                 </form>
@@ -945,7 +1070,14 @@ function Admin() {
                       Annuler
                     </button>
                     {isEditing && (
-                      <button type="button" onClick={deleteCurrentItinerary}>
+                      <button type="button" onClick={() => {deleteCurrentItinerary; setFormDataItineraire({
+                        lieuDepart: "",
+                        lieuArrivee: "",
+                        jourDepart: "",
+                        heureDepart: "00:00",
+                        codeItineraire: "",
+                      });
+                      handleChangeItineraire(); }}>
                         Supprimer
                       </button>
                     )}

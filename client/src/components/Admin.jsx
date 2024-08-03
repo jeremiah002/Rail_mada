@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import logo from "../assets/logo.png";
-import { createItineraire, getItineraires, deleteItineraire } from "../services/admin/itineraireApi";
+import {
+  createItineraire,
+  getItineraires,
+  deleteItineraire,
+} from "../services/admin/itineraireApi";
 import { createTrain, getTrains } from "../services/admin/trainApi";
 import { createCategorie, getCategories } from "../services/admin/categorieApi";
 import { getVoyageurs } from "../services/reservationApi";
+import { useNavigate } from "react-router-dom";
 
 function Admin() {
+  const navigate = useNavigate();
   // Itineraire controller
 
   const [formDataItineraire, setFormDataItineraire] = useState({
@@ -154,6 +160,11 @@ function Admin() {
     setVoyageurs(voyageursData);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/admin/login");
+  };
+
   return (
     <div>
       <nav id="header" className="fixed w-full z-30 top-0 text-white gradient">
@@ -203,6 +214,7 @@ function Admin() {
             </ul>
             <button
               id="navAction"
+              onClick={handleLogout}
               className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
             >
               Déconnecter
@@ -578,7 +590,10 @@ function Admin() {
                           >
                             {itineraires.length !== 0 ? (
                               itineraires.map((itineraire) => (
-                                <option key={itineraire.codeItineraire} value={itineraire.codeItineraire}>
+                                <option
+                                  key={itineraire.codeItineraire}
+                                  value={itineraire.codeItineraire}
+                                >
                                   {itineraire.codeItineraire}
                                 </option>
                               ))

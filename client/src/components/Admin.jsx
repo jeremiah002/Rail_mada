@@ -24,10 +24,20 @@ function Admin() {
     codeItineraire: "",
   });
 
+  const resetFormDataItineraire = () => {
+    setFormDataItineraire({
+      lieuDepart: "",
+      lieuArrivee: "",
+      jourDepart: "",
+      heureDepart: "",
+      codeItineraire: "",
+    });
+  };
+
   const handleChangeItineraire = (e) => {
     setFormDataItineraire({
       ...formDataItineraire,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
@@ -58,7 +68,6 @@ function Admin() {
       const response = await deleteItineraire(selectedItinerary.codeItineraire);
       if (response.status === 200) {
         console.log(response.data);
-        setIsEditing(false); // Sortir du mode d'édition après suppression
         fetchItineraires(); // maj
       }
     } catch (error) {
@@ -101,7 +110,12 @@ function Admin() {
     codeItineraire: "",
   });
 
-  
+  const resetFormDataTrain = () => {
+    setFormDataTrain({
+      immatriculation: "",
+      codeItineraire: "",
+    });
+  };
 
   const [trains, setTrains] = useState([]);
   const fetchTrains = async () => {
@@ -123,6 +137,7 @@ function Admin() {
       immatriculation: train.immatriculation,
       codeItineraire: train.codeItineraire
     });
+    handleChangeTrain;
   };
 
   const trainSubmit = async (e) => {
@@ -184,6 +199,16 @@ function Admin() {
     setFormDataCategorie({
       ...formDataCategorie,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const resetFormDataCategorie = () => {
+    setFormDataCategorie({
+      codeCategorie: "",
+      libelleCategorie: "",
+      nbPlaceSupporte: "",
+      frais: "",
+      immatriculation: "",
     });
   };
 
@@ -725,11 +750,7 @@ function Admin() {
                       className="text-sm font-semibold leading-6 text-gray-900"
                       onClick={() => {
                         setIsEditingTrain(false);
-                        setFormDataTrain({
-                          immatriculation: "",
-                          codeItineraire: "",
-                        });
-                        handleChangeTrain();
+                        resetFormDataTrain();
                       }}
                     >
                       Annuler
@@ -738,12 +759,8 @@ function Admin() {
                       <button type="button" 
                       onClick={() => {
                         setIsEditingTrain(false);
-                        deleteCurrentTrain;
-                        setFormDataTrain({
-                          immatriculation: "",
-                          codeItineraire: "",
-                        });
-                        handleChangeTrain();
+                        deleteCurrentTrain(selectedTrain.immatriculation);
+                        resetFormDataTrain();
                       }}
                       >
                         Supprimer
@@ -894,14 +911,7 @@ function Admin() {
                       className="text-sm font-semibold leading-6 text-gray-900"
                       onClick={() => {
                         setIsEditingCategorie(false);
-                        setFormDataCategorie({
-                          codeCategorie: "",
-                          libelleCategorie: "",
-                          nbPlaceSupporte: "",
-                          frais: "",
-                          immatriculation: "",
-                        });
-                        handleChangeCategorie();
+                        resetFormDataCategorie();
                       }}
                     >
                       Annuler
@@ -910,15 +920,8 @@ function Admin() {
                       <button type="button" 
                       onClick={() => {
                         setIsEditingCategorie(false);
-                        deleteCurrentCategorie;
-                        setFormDataCategorie({
-                          codeCategorie: "",
-                          libelleCategorie: "",
-                          nbPlaceSupporte: "",
-                          frais: "",
-                          immatriculation: "",
-                        });
-                        handleChangeCategorie();
+                        deleteCurrentCategorie(selectedCategorie.codeCategorie);
+                        resetFormDataCategorie();
                       }}
                       >
                         Supprimer
@@ -1058,26 +1061,15 @@ function Admin() {
                   <div className="mt-6 flex items-center justify-end gap-x-6">
                     <button type="button" onClick={() => {
                       setIsEditing(false);
-                      setFormDataItineraire({
-                        lieuDepart: "",
-                        lieuArrivee: "",
-                        jourDepart: "",
-                        heureDepart: "00:00",
-                        codeItineraire: "",
-                      });
-                      handleChangeItineraire();
+                      resetFormDataItineraire();
                     }}>
                       Annuler
                     </button>
                     {isEditing && (
-                      <button type="button" onClick={() => {deleteCurrentItinerary; setFormDataItineraire({
-                        lieuDepart: "",
-                        lieuArrivee: "",
-                        jourDepart: "",
-                        heureDepart: "00:00",
-                        codeItineraire: "",
-                      });
-                      handleChangeItineraire(); }}>
+                      <button type="button" onClick={() => {
+                        deleteCurrentItinerary(selectedItinerary.codeItineraire);
+                        setIsEditing(false);
+                        resetFormDataItineraire(); }}>
                         Supprimer
                       </button>
                     )}

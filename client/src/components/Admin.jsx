@@ -30,9 +30,6 @@ function Admin() {
     });
   };
 
-  useEffect(() => {
-    fetchItineraires();
-  }, []);
   const [itineraires, setItineraires] = useState([]);
   const fetchItineraires = async () => {
     const itinerairesData = await getItineraires();
@@ -66,9 +63,6 @@ function Admin() {
     codeItineraire: "",
   });
 
-  useEffect(() => {
-    fetchTrains();
-  }, []);
   const [trains, setTrains] = useState([]);
   const fetchTrains = async () => {
     const trainsData = await getTrains();
@@ -102,10 +96,7 @@ function Admin() {
     frais: 0,
     immatriculation: "",
   });
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  
   const [categories, setCategories] = useState([]);
   const fetchCategories = async () => {
     const categoriesData = await getCategories();
@@ -150,15 +141,19 @@ function Admin() {
     codeCategorie: "",
   });
 
-  useEffect(() => {
-    fetchVoyageurs();
-  }, []);
   const [voyageurs, setVoyageurs] = useState([]);
   const fetchVoyageurs = async () => {
     const voyageursData = await getVoyageurs();
     console.log(voyageursData);
     setVoyageurs(voyageursData);
   };
+  
+  useEffect(() => {
+    fetchItineraires();
+    fetchCategories();
+    fetchVoyageurs();
+    fetchTrains();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");

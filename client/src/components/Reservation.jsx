@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createVoyageur } from "../services/reservationApi.js";
+import { getCategories } from "../services/admin/categorieApi.js";
 import "../App.css";
 import logo from "../assets/logo.png";
 import logobody from "../assets/logobody.png";
@@ -31,6 +32,12 @@ function Reservation() {
     codeCategorie: '',
   }); 
   
+  const [categories, setCategories] = useState([]);
+  const fetchCategories = async () => {
+    const categoriesData = await getCategories();
+    console.log(categoriesData);
+    setCategories(categoriesData);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,6 +57,9 @@ function Reservation() {
     }
   };
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <>
@@ -214,8 +224,18 @@ function Reservation() {
                             className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                             onChange={handleChange}
                           >
-                            <option value=""></option>
-                            <option value="TNR">C-1</option>
+                            {categories.length !== 0 ? (
+                              categories.map((categorie) => (
+                                <option
+                                  key={categorie.codeCategorie}
+                                  value={categorie.codeCategorie}
+                                >
+                                  {categorie.codeCategorie}
+                                </option>
+                              ))
+                            ) : (
+                              <option value=""></option>
+                            )}
                           </select>
                         </div>
                       </div>

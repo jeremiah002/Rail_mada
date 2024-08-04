@@ -16,6 +16,7 @@ export const getVoyageurs = async () => {
 };
 
 export const createVoyageur = async (voyageurData) => {
+
   try {
     let data = JSON.stringify(voyageurData);
     console.log("Données envoyées:", data);

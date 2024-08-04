@@ -17,7 +17,9 @@ export const getVoyageurs = async () => {
 
 export const createVoyageur = async (voyageurData) => {
   try {
-    let data = JSON.stringify(voyageurData)
+    let data = JSON.stringify(voyageurData);
+    console.log("Données envoyées:", data);
+
     const response = await axios.post(
       `${API_BASE_URL}/voyageurs`, data, {
         headers: {
@@ -26,9 +28,19 @@ export const createVoyageur = async (voyageurData) => {
       }
     );
 
+    console.log("Réponse du serveur:", response);
     return response;
   } catch (error) {
-    console.error("Erreur lors de l'envoi des données:", error);
+    if (error.response) {
+      console.error("Réponse du serveur avec erreur:", error.response.data);
+      console.error("Statut:", error.response.status);
+      console.error("Headers:", error.response.headers);
+    } else if (error.request) {
+      console.error("Aucune réponse reçue:", error.request);
+    } else {
+        console.error("Erreur lors de la création de la requête:", error.message);
+    }
+    console.error("Configuration de la requête:", error.config);
     throw error;
   }
 };

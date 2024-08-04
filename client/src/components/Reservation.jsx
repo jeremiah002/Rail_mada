@@ -5,11 +5,15 @@ import "../App.css";
 import logo from "../assets/logo.png";
 import logobody from "../assets/logobody.png";
 
-
-const classe = ["1re classe", "2eme classe", "3eme classe"];
-
 function Reservation() {
   const location = useLocation();
+  const [datahead, setDatahead] = useState([
+    {id: 1, libelle:'Catégories'},
+    {id: 2, libelle:'Départ'},
+    {id: 3, libelle:'Destination'},
+    {id: 4, libelle:'Heure'},
+    {id: 5, libelle:'Frais'},
+  ]);
 
   function formatTicketNumber(num) {
     return num.toString().padStart(5, '0');
@@ -20,13 +24,13 @@ function Reservation() {
 
   const [formData, setFormData] = useState({
     NumTicket: formattedNumTicket,
-    EmailVoyageur: '',
-    NomVoyageur: '',
-    DateDepart: '',
-    NbPlace: 1,
-    CodeCategorie: '',
-    Itineraire: '',
+    emailVoyageur: '',
+    nomVoyageur: '',
+    dateDepart: '',
+    nbPlace: 1,
+    codeCategorie: '',
   }); 
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -34,9 +38,12 @@ function Reservation() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      await createVoyageur(formData);
+      let response;
+      response = await createVoyageur(formData);
       console.log('Réservation envoyée avec succès');
+      console.log(formData);
       setFormData(prevData => ({ ...prevData, NumTicket: formatTicketNumber(parseInt(prevData.NumTicket, 10) + 1) }));
     } catch (error) {
       console.error(error);
@@ -130,7 +137,7 @@ function Reservation() {
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
                       <div className="sm:col-span-2 sm:col-start-1">
                         <label
-                          htmlFor="username"
+                          htmlFor="nomVoyageur"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
                           Nom du voyageur
@@ -139,7 +146,7 @@ function Reservation() {
                           <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                             <input
                               type="text"
-                              name="NomVoyageur"
+                              name="nomVoyageur"
                               id="username"
                               autoComplete="username"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -151,7 +158,7 @@ function Reservation() {
                       </div>
                       <div className="sm:col-span-2">
                         <label
-                          htmlFor="email"
+                          htmlFor="emailVoyageur"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
                           Email address
@@ -159,7 +166,7 @@ function Reservation() {
                         <div className="mt-2">
                           <input
                             id="email"
-                            name="EmailVoyageur"
+                            name="emailVoyageur"
                             type="email"
                             autoComplete="email"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
@@ -174,91 +181,47 @@ function Reservation() {
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                       <div className="sm:col-span-3">
                         <label
-                          htmlFor="classe"
+                          htmlFor="dateDepart"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
                           Date
                         </label>
                         <div className="mt-2">
-                          <input
+                          <select
                             id="date"
-                            name="DateDepart"
-                            type="date"
+                            name="dateDepart"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
                             onChange={handleChange}
-                          />
+                          >
+                            <option value=""></option>
+                            <option value="20-08">20-08</option>
+                          </select>
                         </div>
                       </div>
                       <br />
                       <div className="sm:col-span-3">
                         <label
-                          htmlFor="itineraire"
+                          htmlFor="codeCategorie"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
-                          Itinéraire
+                        Code catégorie
                         </label>
                         <div className="mt-2">
                           <select
-                            id="itineraire"
-                            name="Itineraire"
-                            autoComplete="country-name"
+                            id="codeCategorie"
+                            name="codeCategorie"
+                            autoComplete="categorie-name"
                             className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                             onChange={handleChange}
                           >
-                            <option value="">Sélectionner un itinéraire</option>
-                            <option value="TNR">TNR</option>
-                            <option value="WFI">WFI</option>
-                            <option value="MKR">MKR</option>
+                            <option value=""></option>
+                            <option value="TNR">C-1</option>
                           </select>
                         </div>
                       </div>
                       <div className="sm:col-span-3">
                         <label
-                          htmlFor="classe"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Classe
-                        </label>
-                        <div className="mt-2">
-                        <select
-                            id="classe"
-                            name="CodeCategorie"
-                            autoComplete="country-name"
-                            className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                            onChange={handleChange}
-                          >
-                            <option value="">Sélectionner une catégorie</option>
-                            {classe.map((cl, index) => (
-                              <option key={index} value={cl}>
-                                {cl}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                      <div className="sm:col-span-3">
-                        <label
-                          htmlFor="frais"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Frais
-                        </label>
-                        <div className="mt-2">
-                          <select
-                            id="frais"
-                            name="frais"
-                            autoComplete="country-name"
-                            className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                          >
-                            <option>Carte VISA</option>
-                            <option>MVola</option>
-                            <option>Airtel Money</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="sm:col-span-3">
-                        <label
-                          htmlFor="nombrePlace"
+                          htmlFor="nbPlace"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
                           Nombre Place
@@ -266,7 +229,7 @@ function Reservation() {
                         <div className="mt-2">
                           <input
                             type="number"
-                            name="NbPlace"
+                            name="nbPlace"
                             id="nombrePlace"
                             autoComplete="address-level2"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -297,18 +260,21 @@ function Reservation() {
           {/* Blog2 */}
           <div className="w-full md:w-3/5 px-4 mb-4">
             <div className="neon bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-2 text-gray-800">
+              <h2 className="text-2xl font-bold mb-2 text-gray-800 text-center">
                 Voyager c'est vivre
               </h2>
               <div className="flex justify-center mb-2">
                 <img src={logobody} alt="Logobody" className="w-32 h-32" />
               </div>
-              <p className="text-gray-700">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptates, nemo id quam, tempore esse fugit eos doloremque.
-                Dolore illum quaerat iusto sunt laudantium omnis veniam enim
-                cupiditate, assumenda autem numquam.
-              </p>
+              <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
+                <thead className="bg-gray-100 dark:bg-gray-700">
+                  <tr>
+                    {datahead.map((item) => (
+                      <th scope="col" className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400" key={item.id}>{item.libelle}</th>
+                    ))}
+                  </tr>
+                </thead>
+              </table>
             </div>
           </div>
         </div>

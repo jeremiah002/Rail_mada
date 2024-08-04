@@ -359,7 +359,7 @@ function Admin() {
       <div className="mx-auto p-4 mt-28">
         <div className="flex flex-wrap -mx-4">
           <div className="w-full md:w-1/2 px-4 mb-4">
-            <div className="neon bg-white p-6 rounded-lg shadow-lg">
+            <div className="neon bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Train
               </h2>
@@ -421,7 +421,7 @@ function Admin() {
               </table>
             </div>
 
-            <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
+            <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Catégorie
               </h2>
@@ -501,11 +501,11 @@ function Admin() {
               </table>
             </div>
 
-            <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
+            <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Itinéraire
               </h2>
-              <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
+              <table className="w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                 <thead className="bg-gray-100 dark:bg-gray-700">
                   <tr>
                     <th
@@ -590,96 +590,10 @@ function Admin() {
               </table>
             </div>
 
-            <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12">
-              <h2 className="text-center font-semibold leading-7 text-gray-900">
-                Voyageurs
-              </h2>
-              <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
-                <thead className="bg-gray-100 dark:bg-gray-700">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Nom
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Email
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Date depart
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Nb Place
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Code Categorie
-                    </th>
-                    <th scope="col" className="p-4">
-                      <span className="sr-only">Edit</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                  {voyageurs.length !== 0 ? (
-                    voyageurs.map((voyageur) => (
-                      <tr
-                        key={voyageur.numTicket}
-                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                      >
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.nomVoyageur}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.emailVoyageur}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.dateDepart}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.nbPlace}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.codeCategorie}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <td
-                        colSpan="6"
-                        className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
-                      >
-                        AUCUN VOYAGEUR
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            
           </div>
           <div className="w-full md:w-1/2 px-4 mb-4">
-            <div className="neon bg-white p-6 rounded-lg shadow-lg">
+            <div className="neon bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="space-y-12">
                 <form onSubmit={trainSubmit}>
                   <div className="border-b border-gray-900/10 pb-12">
@@ -1086,6 +1000,95 @@ function Admin() {
           </div>
         </div>
       </div>
+
+
+      <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
+              <h2 className="text-center font-semibold leading-7 text-gray-900">
+                Voyageurs
+              </h2>
+              <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
+                <thead className="bg-gray-100 dark:bg-gray-700">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Nom
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Email
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Date depart
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Nb Place
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Code Categorie
+                    </th>
+                    <th scope="col" className="p-4">
+                      <span className="sr-only">Edit</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                  {voyageurs.length !== 0 ? (
+                    voyageurs.map((voyageur) => (
+                      <tr
+                        key={voyageur.numTicket}
+                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.nomVoyageur}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.emailVoyageur}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.dateDepart}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.nbPlace}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {voyageur.codeCategorie}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                          <a
+                            href="#"
+                            className="text-blue-600 dark:text-blue-500 hover:underline"
+                          >
+                            Edit
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <td
+                        colSpan="6"
+                        className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                      >
+                        AUCUN VOYAGEUR
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
     </div>
   );
 }

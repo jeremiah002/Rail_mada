@@ -43,7 +43,8 @@ function Admin() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [selectedItinerary, setSelectedItinerary] = useState(null);
-  const editItineraryForm = (itineraire) => {
+  const editItineraryForm = (itineraire, e) => {
+    e.preventDefault();
     setIsEditing(true);
     setSelectedItinerary(itineraire);
     setFormDataItineraire({
@@ -214,7 +215,8 @@ function Admin() {
 
   const [isEditingCategorie, setIsEditingCategorie] = useState(false);
   const [selectedCategorie, setSelectedCategorie] = useState(null);
-  const editCategorieForm = (categorie) => {
+  const editCategorieForm = (categorie, e) => { // Ajoutez e comme paramètre
+    e.preventDefault();
     setIsEditingCategorie(true);
     setSelectedCategorie(categorie);
     setFormDataCategorie({
@@ -358,8 +360,8 @@ function Admin() {
       </nav>
       <div className="mx-auto p-4 mt-28">
         <div className="flex flex-wrap -mx-4">
-          <div className="w-full md:w-1/2 px-4 mb-4">
-            <div className="neon bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div className="w-full md:w-1/2 px-4 mb-0">
+            <div style={{height: '340px'}} className="neon bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Train
               </h2>
@@ -421,7 +423,7 @@ function Admin() {
               </table>
             </div>
 
-            <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
+            <div style={{height: '550px'}} className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Catégorie
               </h2>
@@ -480,7 +482,7 @@ function Admin() {
                           <a
                             href="#"
                             className="text-blue-600 dark:text-blue-500 hover:underline"
-                            onClick={() => editCategorieForm(categorie)}
+                            onClick={(e) => editCategorieForm(categorie, e)}
                           >
                             Edit
                           </a>
@@ -501,7 +503,7 @@ function Admin() {
               </table>
             </div>
 
-            <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
+            <div style={{height: '490px'}} className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Itinéraire
               </h2>
@@ -569,7 +571,7 @@ function Admin() {
                           <a
                             href="#"
                             className="text-blue-600 dark:text-blue-500 hover:underline"
-                            onClick={() => editItineraryForm(itineraire)}
+                            onClick={(e) => editItineraryForm(itineraire, e)}
                           >
                             Edit
                           </a>

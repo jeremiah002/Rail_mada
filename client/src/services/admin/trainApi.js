@@ -24,6 +24,26 @@ export const getTrains = async () => {
   }
 };
 
+export const getCategorieInTrain = async (immatriculation) => {
+  if (!TOKEN) {
+    throw new Error("No token found");
+  }
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/trains/${immatriculation}/categories`, {
+      headers: {
+        "Authorization": `Bearer ${TOKEN}`,
+      },
+    });
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
+
 export const createTrain = async (trainsData) => {
   if (!TOKEN) {
     throw new Error("No token found");

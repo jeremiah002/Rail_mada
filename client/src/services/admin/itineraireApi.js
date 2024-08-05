@@ -24,6 +24,26 @@ export const getItineraires = async () => {
   }
 };
 
+export const getTrainsInItineraire = async (codeItineraire) => {
+  if (!TOKEN) {
+    throw new Error("No token found");
+  }
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/itineraires/${codeItineraire}/trains`, {
+      headers: {
+        "Authorization": `Bearer ${TOKEN}`,
+      },
+    });
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
+
 export const createItineraire = async (itinerairesData) => {
   if (!TOKEN) {
     throw new Error("No token found");

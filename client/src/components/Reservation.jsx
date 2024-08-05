@@ -24,8 +24,8 @@ function Reservation() {
     return num.toString().padStart(5, "0");
   }
 
-  const numTicket = 1;
-  const formattedNumTicket = formatTicketNumber(numTicket); // '00001'
+  const numTicket = 3;
+  const formattedNumTicket = formatTicketNumber(numTicket);
 
   const [formData, setFormData] = useState({
     NumTicket: formattedNumTicket,
@@ -51,18 +51,7 @@ function Reservation() {
   };
 
   const [trainInItineraires, setTrainInItineraires] = useState([]);
-  // const fetchTrainInItineraires = async (codeItineraire) => {
-  //   const trainInItinerairesData = await getTrainsInItineraire(codeItineraire);
-  //   console.log(trainInItinerairesData);
-  //   setTrainInItineraires(trainInItinerairesData);
-  // };
-
   const [categorieInTrain, setCategorieInTrain] = useState([]);
-  // const fetchCategorieInTrain = async (immatriculation) => {
-  //   const categorieInTrainData = await getCategorieInTrain(immatriculation);
-  //   console.log(categorieInTrainData);
-  //   setCategorieInTrain(categorieInTrainData);
-  // };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -80,6 +69,7 @@ function Reservation() {
         ...prevData,
         NumTicket: formatTicketNumber(parseInt(prevData.NumTicket, 10) + 1),
       }));
+      clearFormData();
     } catch (error) {
       console.error(error);
     }
@@ -151,6 +141,16 @@ function Reservation() {
         ? itineraire.lieuArrivee === selectedLieuArrivee
         : true)
   );
+
+  const clearFormData = (event) => {
+    setFormData({
+      emailVoyageur: "",
+      nomVoyageur: "",
+      dateDepart: "",
+      nbPlace: 1,
+      codeCategorie: "",
+    });
+  };
 
   return (
     <>
@@ -359,6 +359,7 @@ function Reservation() {
                   <button
                     type="button"
                     className="text-sm font-semibold leading-6 text-gray-900"
+                    onClick={clearFormData}
                   >
                     Annuler
                   </button>

@@ -69,6 +69,11 @@ function Reservation() {
     fetchItineraires();
   }, []);
 
+  // Nouvelle logique pour créer des ensembles pour lieuDepart et lieuArrivee
+  const uniqueLieuDeparts = new Set(itineraires.map(itineraire => itineraire.lieuDepart));
+  const uniqueLieuArrivees = new Set(itineraires.map(itineraire => itineraire.lieuArrivee));
+
+
   return (
     <>
       <nav id="header" className="fixed w-full z-30 top-0 text-white gradient">
@@ -311,18 +316,11 @@ function Reservation() {
                     className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >  
                     <option value=""></option>
-                    {itineraires.length !== 0 ? (
-                              itineraires.map((itineraire) => (
-                                <option
-                                  key={itineraire.codeItineraire}
-                                  value={itineraire.lieuDepart}
-                                >
-                                  {itineraire.lieuDepart}
-                                </option>
-                              ))
-                            ) : (
-                              <option value=""></option>
-                      )}
+                  {Array.from(uniqueLieuDeparts).map((lieuDepart, index) => (
+                    <option key={index} value={lieuDepart}>
+                      {lieuDepart}
+                    </option>
+                  ))}
                   </select>
                 </div>
                 <div className="sm:w-1/2 mb-4 px-4">
@@ -338,18 +336,11 @@ function Reservation() {
                     className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >  
                     <option value=""></option>
-                    {itineraires.length !== 0 ? (
-                              itineraires.map((itineraire) => (
-                                <option
-                                  key={itineraire.codeItineraire}
-                                  value={itineraire.lieuArrivee}
-                                >
-                                  {itineraire.lieuArrivee}
-                                </option>
-                              ))
-                            ) : (
-                              <option value=""></option>
-                      )}
+                  {Array.from(uniqueLieuArrivees).map((lieuArrivee, index) => (
+                    <option key={index} value={lieuArrivee}>
+                      {lieuArrivee}
+                    </option>
+                  ))}
                   </select>
                 </div>
               </div>

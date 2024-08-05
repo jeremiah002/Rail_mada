@@ -72,7 +72,7 @@ namespace Server.Controllers
         public IActionResult GetCategoriesIntrain(string immatriculation)
         {
             var categories = _context.Categories
-                .FromSqlRaw("SELECT * FROM Categorie WHERE immatriculation = {0}", immatriculation)
+                .FromSqlRaw("SELECT * FROM Categories WHERE immatriculation = {0}", immatriculation)
                 .ToList();
 
             if (categories.Count == 0)

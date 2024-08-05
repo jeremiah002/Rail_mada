@@ -72,7 +72,7 @@ namespace Server.Controllers
         public IActionResult GetTrainsInItineraire(string CodeItineraire)
         {
             var trains = _context.Trains
-                .FromSqlRaw("SELECT * FROM Train WHERE CodeItineraire = {0}", CodeItineraire)
+                .FromSqlRaw("SELECT * FROM Trains WHERE CodeItineraire = {0}", CodeItineraire)
                 .ToList();
 
             if (trains.Count == 0)

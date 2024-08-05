@@ -12,29 +12,29 @@ import logobody from "../assets/logobody.png";
 function Reservation() {
   const location = useLocation();
   const [datahead, setDatahead] = useState([
-    {id: 1, libelle:'Jour'},
-    {id: 2, libelle:'Heure'},
-    {id: 3, libelle:'Categorie'},
-    {id: 4, libelle:'Place'},
-    {id: 5, libelle:'Frais'},
+    { id: 1, libelle: "Jour" },
+    { id: 2, libelle: "Heure" },
+    { id: 3, libelle: "Categorie" },
+    { id: 4, libelle: "Place" },
+    { id: 5, libelle: "Frais" },
   ]);
 
   function formatTicketNumber(num) {
-    return num.toString().padStart(5, '0');
+    return num.toString().padStart(5, "0");
   }
 
   const numTicket = 1;
-  const formattedNumTicket = formatTicketNumber(numTicket);  // '00001'
+  const formattedNumTicket = formatTicketNumber(numTicket); // '00001'
 
   const [formData, setFormData] = useState({
     NumTicket: formattedNumTicket,
-    emailVoyageur: '',
-    nomVoyageur: '',
-    dateDepart: '',
+    emailVoyageur: "",
+    nomVoyageur: "",
+    dateDepart: "",
     nbPlace: 1,
-    codeCategorie: '',
-  }); 
-  
+    codeCategorie: "",
+  });
+
   const [categories, setCategories] = useState([]);
   const fetchCategories = async () => {
     const categoriesData = await getCategories();
@@ -50,18 +50,18 @@ function Reservation() {
   };
 
   const [trainInItineraires, setTrainInItineraires] = useState([]);
-  const fetchTrainInItineraires = async () => {
-    const trainInItinerairesData = await getTrainsInItineraire();
-    console.log(trainInItinerairesData);
-    setTrainInItineraires(trainInItinerairesData);
-  };
+  // const fetchTrainInItineraires = async (codeItineraire) => {
+  //   const trainInItinerairesData = await getTrainsInItineraire(codeItineraire);
+  //   console.log(trainInItinerairesData);
+  //   setTrainInItineraires(trainInItinerairesData);
+  // };
 
   const [categorieInTrain, setCategorieInTrain] = useState([]);
-  const fetchCategorieInTrain = async () => {
-    const categorieInTrainData = await getCategorieInTrain();
-    console.log(categorieInTrainData);
-    setCategorieInTrain(categorieInTrainData);
-  };
+  // const fetchCategorieInTrain = async (immatriculation) => {
+  //   const categorieInTrainData = await getCategorieInTrain(immatriculation);
+  //   console.log(categorieInTrainData);
+  //   setCategorieInTrain(categorieInTrainData);
+  // };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -73,9 +73,12 @@ function Reservation() {
     try {
       let response;
       response = await createVoyageur(formData);
-      console.log('Réservation envoyée avec succès');
+      console.log("Réservation envoyée avec succès");
       console.log(formData);
-      setFormData(prevData => ({ ...prevData, NumTicket: formatTicketNumber(parseInt(prevData.NumTicket, 10) + 1) }));
+      setFormData((prevData) => ({
+        ...prevData,
+        NumTicket: formatTicketNumber(parseInt(prevData.NumTicket, 10) + 1),
+      }));
     } catch (error) {
       console.error(error);
     }
@@ -84,14 +87,43 @@ function Reservation() {
   useEffect(() => {
     fetchCategories();
     fetchItineraires();
-    fetchTrainInItineraires();
-    fetchCategorieInTrain();
   }, []);
 
-  // Nouvelle logique pour créer des ensembles pour lieuDepart et lieuArrivee
-  const uniqueLieuDeparts = new Set(itineraires.map(itineraire => itineraire.lieuDepart));
-  const uniqueLieuArrivees = new Set(itineraires.map(itineraire => itineraire.lieuArrivee));
+  // Fetch train data when itineraires change
+  useEffect(() => {
+    const fetchTrainInItineraires = async () => {
+      const trainData = await Promise.all(
+        itineraires.map((itineraire) =>
+          getTrainsInItineraire(itineraire.codeItineraire)
+        )
+      );
+      setTrainInItineraires(trainData.flat()); // Flatten the array if needed
+    };
 
+    fetchTrainInItineraires();
+  }, [itineraires]);
+
+  // Fetch category data when trainInItineraires change
+  useEffect(() => {
+    const fetchCategorieInTrain = async () => {
+      const categorieData = await Promise.all(
+        trainInItineraires.map((train) =>
+          getCategorieInTrain(train.immatriculation)
+        )
+      );
+      setCategorieInTrain(categorieData.flat()); // Flatten the array if needed
+    };
+
+    fetchCategorieInTrain();
+  }, [trainInItineraires]);
+
+  // Nouvelle logique pour créer des ensembles pour lieuDepart et lieuArrivee
+  const uniqueLieuDeparts = new Set(
+    itineraires.map((itineraire) => itineraire.lieuDepart)
+  );
+  const uniqueLieuArrivees = new Set(
+    itineraires.map((itineraire) => itineraire.lieuArrivee)
+  );
 
   return (
     <>
@@ -247,7 +279,7 @@ function Reservation() {
                           htmlFor="codeCategorie"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
-                        Code catégorie
+                          Code catégorie
                         </label>
                         <div className="mt-2">
                           <select
@@ -257,7 +289,8 @@ function Reservation() {
                             autoComplete="categorie-name"
                             className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                             onChange={handleChange}
-                          ><option value=""></option>
+                          >
+                            <option value=""></option>
                             {categories.length !== 0 ? (
                               categories.map((categorie) => (
                                 <option
@@ -329,17 +362,17 @@ function Reservation() {
                   >
                     Depart
                   </label>
-                  <select 
-                    name="lieuDepart" 
+                  <select
+                    name="lieuDepart"
                     id="depart"
                     className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                  >  
+                  >
                     <option value=""></option>
-                  {Array.from(uniqueLieuDeparts).map((lieuDepart, index) => (
-                    <option key={index} value={lieuDepart}>
-                      {lieuDepart}
-                    </option>
-                  ))}
+                    {Array.from(uniqueLieuDeparts).map((lieuDepart, index) => (
+                      <option key={index} value={lieuDepart}>
+                        {lieuDepart}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="sm:w-1/2 mb-4 px-4">
@@ -349,17 +382,19 @@ function Reservation() {
                   >
                     Destination
                   </label>
-                  <select 
-                    name="lieuArrivee" 
+                  <select
+                    name="lieuArrivee"
                     id="depart"
                     className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                  >  
+                  >
                     <option value=""></option>
-                  {Array.from(uniqueLieuArrivees).map((lieuArrivee, index) => (
-                    <option key={index} value={lieuArrivee}>
-                      {lieuArrivee}
-                    </option>
-                  ))}
+                    {Array.from(uniqueLieuArrivees).map(
+                      (lieuArrivee, index) => (
+                        <option key={index} value={lieuArrivee}>
+                          {lieuArrivee}
+                        </option>
+                      )
+                    )}
                   </select>
                 </div>
               </div>
@@ -367,21 +402,55 @@ function Reservation() {
                 <thead className="bg-gray-100 dark:bg-gray-700">
                   <tr>
                     {datahead.map((item) => (
-                      <th scope="col" className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400" key={item.id}>{item.libelle}</th>
+                      <th
+                        scope="col"
+                        className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                        key={item.id}
+                      >
+                        {item.libelle}
+                      </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    
-                  </tr>
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                  {itineraires.length !== 0 ? (
+                    itineraires.map((itineraire) => (
+                      <React.Fragment key={itineraire.codeItineraire}>
+                        {trainInItineraires
+                          .filter(
+                            (train) =>
+                              train.codeItineraire === itineraire.codeItineraire
+                          )
+                          .map((train) =>
+                            categorieInTrain
+                              .filter(
+                                (categorie) =>
+                                  categorie.immatriculation ===
+                                  train.immatriculation
+                              )
+                              .map((categorie) => (
+                                <tr key={categorie.immatriculation} className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{itineraire.jourDepart}</td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{itineraire.heureDepart}</td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{categorie.libelleCategorie}</td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{categorie.nbPlaceSupporte}</td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{categorie.frais}</td>
+                                </tr>
+                              ))
+                          )}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5">vide</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-
 
       <footer className="bg-white">
         <div className="container mx-auto px-8">

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { createVoyageur } from "../services/reservationApi";
 import { getCategories } from "../services/admin/categorieApi";
 import { getItineraires } from "../services/admin/itineraireApi";
+import { getTrainsInItineraire } from "../services/admin/itineraireApi";
+import { getCategorieInTrain } from "../services/admin/trainApi";
 import "../App.css";
 import logo from "../assets/logo.png";
 import logobody from "../assets/logobody.png";
@@ -12,7 +14,9 @@ function Reservation() {
   const [datahead, setDatahead] = useState([
     {id: 1, libelle:'Jour'},
     {id: 2, libelle:'Heure'},
-    {id: 3, libelle:'Frais'},
+    {id: 3, libelle:'Categorie'},
+    {id: 4, libelle:'Place'},
+    {id: 5, libelle:'Frais'},
   ]);
 
   function formatTicketNumber(num) {
@@ -45,6 +49,19 @@ function Reservation() {
     setItineraires(itinerairesData);
   };
 
+  const [trainInItineraires, setTrainInItineraires] = useState([]);
+  const fetchTrainInItineraires = async () => {
+    const trainInItinerairesData = await getTrainsInItineraire();
+    console.log(trainInItinerairesData);
+    setTrainInItineraires(trainInItinerairesData);
+  };
+
+  const [categorieInTrain, setCategorieInTrain] = useState([]);
+  const fetchCategorieInTrain = async () => {
+    const categorieInTrainData = await getCategorieInTrain();
+    console.log(categorieInTrainData);
+    setCategorieInTrain(categorieInTrainData);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -67,6 +84,8 @@ function Reservation() {
   useEffect(() => {
     fetchCategories();
     fetchItineraires();
+    fetchTrainInItineraires();
+    fetchCategorieInTrain();
   }, []);
 
   // Nouvelle logique pour créer des ensembles pour lieuDepart et lieuArrivee
@@ -352,6 +371,11 @@ function Reservation() {
                     ))}
                   </tr>
                 </thead>
+                <tbody>
+                  <tr>
+                    
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>

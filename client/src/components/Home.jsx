@@ -102,7 +102,7 @@ function Home() {
               `}
               onClick={() => navigate('/reservation')}
               >
-                Reserver
+                Contact
               </button>
             </div>
           </div>

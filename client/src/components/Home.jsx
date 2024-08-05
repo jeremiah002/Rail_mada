@@ -182,20 +182,19 @@ function Home() {
             <div className="flex flex-wrap">
               <div className="w-5/6 sm:w-1/2 p-6">
                 <h3 className="text-3xl text-gray-800 font-bold leading-none mb-3">
-                  Lorem ipsum dolor sit amet
+                Paysages Magnifiques
                 </h3>
                 <p className="text-gray-600 mb-8">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
+                  "Voyager en train offre une sensation unique de liberté et de découverte, permettant d'apprécier chaque moment du trajet tout en bénéficiant d'un confort inégalé."
                   <br />
                   <br />
                   Aller à:
-                  <a
+                  <Link
                     className="text-pink-500 underline"
-                    href="https://undraw.co/"
+                    to="/reservation"
                   >
                     réservation.co
-                  </a>
+                  </Link>
                 </p>
               </div>
               <div className="w-full sm:w-1/2 p-6">
@@ -218,24 +217,17 @@ function Home() {
                   href="#"
                   className="flex flex-wrap no-underline hover:no-underline"
                 >
-                  <p className="w-full text-gray-600 text-xs md:text-sm px-6">
-                    PREMIÈRE classNameE
+                  <p className="w-full text-gray-600 text-xs md:text-sm px-6 pt-4">
+                    PREMIÈRE classe
                   </p>
                   <div className="w-full font-bold text-xl text-gray-800 px-6">
-                    Lorem ipsum dolor sit amet.
+                    Confort Supérieur.
                   </div>
                   <p className="text-gray-800 text-base px-6 mb-5">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
+                    Sièges plus larges et plus spacieux, souvent inclinables et parfois avec des repose-pieds.
+                    Plus d'espace pour les jambes et un environnement généralement plus calme.
                   </p>
                 </a>
-              </div>
-              <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
-                <div className="flex items-center justify-start">
-                  <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-                    Action
-                  </button>
-                </div>
               </div>
             </div>
             <div className="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
@@ -244,24 +236,17 @@ function Home() {
                   href="#"
                   className="flex flex-wrap no-underline hover:no-underline"
                 >
-                  <p className="w-full text-gray-600 text-xs md:text-sm px-6">
-                    DEUXIÈME classNameE
+                  <p className="w-full text-gray-600 text-xs md:text-sm px-6 pt-4">
+                    DEUXIÈME classe
                   </p>
                   <div className="w-full font-bold text-xl text-gray-800 px-6">
-                    Lorem ipsum dolor sit amet.
+                    Confort Standard.
                   </div>
                   <p className="text-gray-800 text-base px-6 mb-5">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
+                    Sièges confortables mais moins spacieux et moins inclinables que ceux de la première classe.
+                    Moins d'espace pour les jambes comparé à la première classe.
                   </p>
                 </a>
-              </div>
-              <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
-                <div className="flex items-center justify-center">
-                  <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-                    Action
-                  </button>
-                </div>
               </div>
             </div>
             <div className="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
@@ -270,24 +255,17 @@ function Home() {
                   href="#"
                   className="flex flex-wrap no-underline hover:no-underline"
                 >
-                  <p className="w-full text-gray-600 text-xs md:text-sm px-6">
-                    TROISIÈME classNameE
+                  <p className="w-full text-gray-600 text-xs md:text-sm px-6 pt-4">
+                    TROISIÈME classe
                   </p>
                   <div className="w-full font-bold text-xl text-gray-800 px-6">
-                    Lorem ipsum dolor sit amet.
+                    Confort Basique.
                   </div>
                   <p className="text-gray-800 text-base px-6 mb-5">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
+                    Sièges souvent moins confortables, avec moins d'espace pour les jambes et sans options d'inclinaison.
+                    Embarquement et débarquement standard, souvent plus de files d'attente.
                   </p>
                 </a>
-              </div>
-              <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
-                <div className="flex items-center justify-end">
-                  <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-                    Action
-                  </button>
-                </div>
               </div>
             </div>
           </div>

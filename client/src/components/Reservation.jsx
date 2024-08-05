@@ -232,7 +232,7 @@ function Reservation() {
         <div className="flex flex-wrap -mx-4">
           {/* Blog1 */}
           <div className="w-full md:w-2/5 px-4 mb-4">
-            <div className="neon bg-white p-6 rounded-lg shadow-lg">
+            <div className="neon h-full bg-white p-6 rounded-lg shadow-lg">
               <form onSubmit={handleSubmit}>
                 <div className="space-y-12">
                   <div className="border-b border-gray-900/10 pb-12">
@@ -316,6 +316,7 @@ function Reservation() {
                           <select
                             id="codeCategorie"
                             name="codeCategorie"
+                            disabled
                             value={selectedLibelleItineraire.codeCategorie}
                             autoComplete="categorie-name"
                             className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
@@ -436,7 +437,7 @@ function Reservation() {
                 </div>
               </div>
 
-              <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
+              <table className="w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                 <thead className="bg-gray-100 dark:bg-gray-700">
                   <tr>
                     {datahead.map((item) => (

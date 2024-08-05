@@ -1011,6 +1011,9 @@ function Admin() {
               <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                 <thead className="bg-gray-100 dark:bg-gray-700">
                   <tr>
+                    <th scope="col" className="p-4">
+                      Ticket
+                    </th>
                     <th
                       scope="col"
                       className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
@@ -1041,9 +1044,6 @@ function Admin() {
                     >
                       Code Categorie
                     </th>
-                    <th scope="col" className="p-4">
-                      <span className="sr-only">Edit</span>
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -1053,6 +1053,9 @@ function Admin() {
                         key={voyageur.numTicket}
                         className="hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
+                        <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                          {voyageur.numTicket}
+                        </td>
                         <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                           {voyageur.nomVoyageur}
                         </td>
@@ -1067,14 +1070,6 @@ function Admin() {
                         </td>
                         <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                           {voyageur.codeCategorie}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
                         </td>
                       </tr>
                     ))

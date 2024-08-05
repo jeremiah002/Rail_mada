@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { createVoyageur } from "../services/reservationApi.js";
-import { getCategories } from "../services/admin/categorieApi.js";
+import { createVoyageur } from "../services/reservationApi";
+import { getCategories } from "../services/admin/categorieApi";
 import "../App.css";
 import logo from "../assets/logo.png";
 import logobody from "../assets/logobody.png";
@@ -157,6 +157,7 @@ function Reservation() {
                             <input
                               type="text"
                               name="nomVoyageur"
+                              value={formData.nomVoyageur}
                               id="username"
                               autoComplete="username"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -177,6 +178,7 @@ function Reservation() {
                           <input
                             id="email"
                             name="emailVoyageur"
+                            value={formData.emailVoyageur}
                             type="email"
                             autoComplete="email"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
@@ -200,11 +202,12 @@ function Reservation() {
                           <select
                             id="date"
                             name="dateDepart"
+                            value={formData.dateDepart}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
                             onChange={handleChange}
                           >
                             <option value=""></option>
-                            <option value="20-08">20-08</option>
+                            <option value="20-08-2024">20-08</option>
                           </select>
                         </div>
                       </div>
@@ -220,10 +223,11 @@ function Reservation() {
                           <select
                             id="codeCategorie"
                             name="codeCategorie"
+                            value={formData.codeCategorie}
                             autoComplete="categorie-name"
                             className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                             onChange={handleChange}
-                          >
+                          ><option value=""></option>
                             {categories.length !== 0 ? (
                               categories.map((categorie) => (
                                 <option
@@ -250,6 +254,7 @@ function Reservation() {
                           <input
                             type="number"
                             name="nbPlace"
+                            value={formData.nbPlace}
                             id="nombrePlace"
                             autoComplete="address-level2"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

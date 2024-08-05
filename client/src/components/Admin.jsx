@@ -430,6 +430,12 @@ function Admin() {
               <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                 <thead className="bg-gray-100 dark:bg-gray-700">
                   <tr>
+                  <th
+                      scope="col"
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Code Categorie
+                    </th>
                     <th
                       scope="col"
                       className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
@@ -466,6 +472,9 @@ function Admin() {
                         key={categorie.codeCategorie}
                         className="hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                          {categorie.codeCategorie}
+                        </td>
                         <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                           {categorie.libelleCategorie}
                         </td>
@@ -690,6 +699,7 @@ function Admin() {
                     </button>
                   </div>
                 </form>
+
 
                 <form onSubmit={categorieSubmit}>
                   <div className="border-b border-gray-900/10 pb-12">

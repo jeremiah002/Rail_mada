@@ -62,7 +62,7 @@ function Reservation() {
     try {
       let subject = "Réservation sur Rail's Mada";
       let body =
-        "Bonjour Madame/Monsieur,\n\nVotre réservation a été effectuée avec succes.\nMerci d'avoir choisi nos services et nous vous souhaitons un bon voyage ";
+        "Bonjour Madame/Monsieur,\n\nVotre réservation a été effectuée avec succes.\nMerci d'avoir choisi nos services et nous vous souhaitons un bon voyage.\n\nCordialement,";
       let response = await createVoyageur(formData);
       let mailResponse = await sendEmail(formData.emailVoyageur, subject, body);
       if (response.status === 200 && mailResponse.status === 200) {

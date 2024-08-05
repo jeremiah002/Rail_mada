@@ -1,5 +1,7 @@
+import Swal from "sweetalert2";
 import { Link, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import { sendEmail } from "../services/emailApi";
 import { createVoyageur } from "../services/reservationApi";
 import { getCategories } from "../services/admin/categorieApi";
 import { getItineraires } from "../services/admin/itineraireApi";
@@ -25,7 +27,7 @@ function Reservation() {
   }
 
   const [formData, setFormData] = useState({
-    NumTicket: "",
+    NumTicket: 0,
     emailVoyageur: "",
     nomVoyageur: "",
     dateDepart: "",
@@ -58,10 +60,22 @@ function Reservation() {
     e.preventDefault();
 
     try {
-      let response;
-      response = await createVoyageur(formData);
-      console.log("Réservation envoyée avec succès");
-      console.log(formData);
+      let subject = "Réservation sur Rail's Mada";
+      let body =
+        "Bonjour Madame/Monsieur,\n\nVotre réservation a été effectuée avec succes.\nMerci d'avoir choisi nos services et nous vous souhaitons un bon voyage ";
+      let response = await createVoyageur(formData);
+      let mailResponse = await sendEmail(formData.emailVoyageur, subject, body);
+      if (response.status === 200 && mailResponse.status === 200) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Réservation effectuée avec succès!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log("Réservation envoyée avec succès");
+        console.log(formData);
+      }
       clearFormData();
     } catch (error) {
       console.error(error);

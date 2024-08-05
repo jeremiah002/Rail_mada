@@ -125,6 +125,37 @@ function Reservation() {
     itineraires.map((itineraire) => itineraire.lieuArrivee)
   );
 
+  const [selectedLieuDepart, setSelectedLieuDepart] = useState("");
+  const [selectedLieuArrivee, setSelectedLieuArrivee] = useState("");
+  const [selectedLibelleItineraire, setSelectedLibelleItineraire] =
+    useState("");
+
+  // Fonction pour gérer les changements dans le combobox lieuDepart
+  const handleLieuDepartChange = (event) => {
+    setSelectedLieuDepart(event.target.value);
+  };
+
+  // Fonction pour gérer les changements dans le combobox lieuArrivee
+  const handleLieuArriveeChange = (event) => {
+    setSelectedLieuArrivee(event.target.value);
+  };
+
+  // Fonction pour gérer le clic sur une ligne
+  const handleRowClick = (itineraire) => {
+    setSelectedLibelleItineraire(itineraire);
+  };
+
+  // Filtrer les itinéraires basés sur les sélections
+  const filteredItineraires = itineraires.filter(
+    (itineraire) =>
+      (selectedLieuDepart
+        ? itineraire.lieuDepart === selectedLieuDepart
+        : true) &&
+      (selectedLieuArrivee
+        ? itineraire.lieuArrivee === selectedLieuArrivee
+        : true)
+  );
+
   return (
     <>
       <nav id="header" className="fixed w-full z-30 top-0 text-white gradient">
@@ -285,10 +316,12 @@ function Reservation() {
                           <select
                             id="codeCategorie"
                             name="codeCategorie"
-                            value={formData.codeCategorie}
+                            value={selectedLibelleItineraire.codeCategorie}
                             autoComplete="categorie-name"
                             className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                            onChange={handleChange}
+                            onChange={(e) =>
+                              setSelectedLibelleItineraire(e.target.value)
+                            }
                           >
                             <option value=""></option>
                             {categories.length !== 0 ? (
@@ -297,7 +330,7 @@ function Reservation() {
                                   key={categorie.codeCategorie}
                                   value={categorie.codeCategorie}
                                 >
-                                  {categorie.codeCategorie}
+                                  {categorie.libelleCategorie}
                                 </option>
                               ))
                             ) : (
@@ -365,6 +398,8 @@ function Reservation() {
                   <select
                     name="lieuDepart"
                     id="depart"
+                    value={selectedLieuDepart}
+                    onChange={handleLieuDepartChange}
                     className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
                     <option value=""></option>
@@ -384,7 +419,9 @@ function Reservation() {
                   </label>
                   <select
                     name="lieuArrivee"
-                    id="depart"
+                    id="arrivee"
+                    value={selectedLieuArrivee}
+                    onChange={handleLieuArriveeChange}
                     className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
                     <option value=""></option>
@@ -398,6 +435,7 @@ function Reservation() {
                   </select>
                 </div>
               </div>
+
               <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                 <thead className="bg-gray-100 dark:bg-gray-700">
                   <tr>
@@ -413,8 +451,8 @@ function Reservation() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                  {itineraires.length !== 0 ? (
-                    itineraires.map((itineraire) => (
+                  {filteredItineraires.length !== 0 ? (
+                    filteredItineraires.map((itineraire) => (
                       <React.Fragment key={itineraire.codeItineraire}>
                         {trainInItineraires
                           .filter(
@@ -429,20 +467,39 @@ function Reservation() {
                                   train.immatriculation
                               )
                               .map((categorie) => (
-                                <tr key={categorie.immatriculation} className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{itineraire.jourDepart}</td>
-                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{itineraire.heureDepart}</td>
-                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{categorie.libelleCategorie}</td>
-                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{categorie.nbPlaceSupporte}</td>
-                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{categorie.frais}</td>
+                                <tr
+                                  key={categorie.immatriculation}
+                                  className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                                  onClick={() => handleRowClick(categorie)}
+                                >
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {itineraire.jourDepart}
+                                  </td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {itineraire.heureDepart}
+                                  </td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {categorie.libelleCategorie}
+                                  </td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {categorie.nbPlaceSupporte}
+                                  </td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {categorie.frais}
+                                  </td>
                                 </tr>
                               ))
                           )}
                       </React.Fragment>
                     ))
                   ) : (
-                    <tr>
-                      <td colSpan="5">vide</td>
+                    <tr className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      <td
+                        className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                        colSpan="5"
+                      >
+                        Vide
+                      </td>
                     </tr>
                   )}
                 </tbody>

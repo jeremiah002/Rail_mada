@@ -118,8 +118,6 @@ function Reservation() {
 
   const [selectedLieuDepart, setSelectedLieuDepart] = useState("");
   const [selectedLieuArrivee, setSelectedLieuArrivee] = useState("");
-  const [selectedLibelleItineraire, setSelectedLibelleItineraire] =
-    useState("");
 
   // Fonction pour gérer les changements dans le combobox lieuDepart
   const handleLieuDepartChange = (event) => {
@@ -150,6 +148,14 @@ function Reservation() {
       nbPlace: 1,
       codeCategorie: "",
     });
+  };
+
+  // Ajoutez cette fonction dans votre composant Reservation pour gérer les clics sur les lignes du tableau
+  const handleRowClick = (codeCategorie) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      codeCategorie: codeCategorie,
+    }));
   };
 
   return (
@@ -465,6 +471,9 @@ function Reservation() {
                                 <tr
                                   key={uuidv4()}
                                   className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                                  onClick={() =>
+                                    handleRowClick(categorie.codeCategorie)
+                                  }
                                 >
                                   <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                     {itineraire.jourDepart}

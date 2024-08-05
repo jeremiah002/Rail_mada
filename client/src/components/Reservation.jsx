@@ -5,6 +5,7 @@ import { getCategories } from "../services/admin/categorieApi";
 import { getItineraires } from "../services/admin/itineraireApi";
 import { getTrainsInItineraire } from "../services/admin/itineraireApi";
 import { getCategorieInTrain } from "../services/admin/trainApi";
+import { v4 as uuidv4 } from "uuid";
 import "../App.css";
 import logo from "../assets/logo.png";
 import logobody from "../assets/logobody.png";
@@ -140,11 +141,6 @@ function Reservation() {
     setSelectedLieuArrivee(event.target.value);
   };
 
-  // Fonction pour gérer le clic sur une ligne
-  const handleRowClick = (itineraire) => {
-    setSelectedLibelleItineraire(itineraire);
-  };
-
   // Filtrer les itinéraires basés sur les sélections
   const filteredItineraires = itineraires.filter(
     (itineraire) =>
@@ -232,7 +228,7 @@ function Reservation() {
         <div className="flex flex-wrap -mx-4">
           {/* Blog1 */}
           <div className="w-full md:w-2/5 px-4 mb-4">
-            <div className="neon h-full bg-white p-6 rounded-lg shadow-lg">
+            <div className="neon bg-white p-6 rounded-lg shadow-lg">
               <form onSubmit={handleSubmit}>
                 <div className="space-y-12">
                   <div className="border-b border-gray-900/10 pb-12">
@@ -316,17 +312,12 @@ function Reservation() {
                           <select
                             id="codeCategorie"
                             name="codeCategorie"
-                            disabled
-                            value={selectedLibelleItineraire.codeCategorie}
+                            value={formData.codeCategorie}
                             autoComplete="categorie-name"
                             className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                            onChange={(e) =>
-                              setSelectedLibelleItineraire(e.target.value)
-                            }
+                            onChange={handleChange}
                           >
-                            <option value="">
-                              Selectionner sur le tableau
-                            </option>
+                            <option value=""></option>
                             {categories.length !== 0 ? (
                               categories.map((categorie) => (
                                 <option
@@ -438,77 +429,74 @@ function Reservation() {
                   </select>
                 </div>
               </div>
-              <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-                <table className="w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
-                  <thead className="bg-gray-100 dark:bg-gray-700">
-                    <tr>
-                      {datahead.map((item) => (
-                        <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                          key={item.id}
-                        >
-                          {item.libelle}
-                        </th>
-                      ))}
+
+              <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
+                <thead className="bg-gray-100 dark:bg-gray-700">
+                  <tr>
+                    {datahead.map((item) => (
+                      <th
+                        scope="col"
+                        className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+                        key={item.id}
+                      >
+                        {item.libelle}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                  {filteredItineraires.length !== 0 ? (
+                    filteredItineraires.map((itineraire) => (
+                      <React.Fragment key={uuidv4()}>
+                        {trainInItineraires
+                          .filter(
+                            (train) =>
+                              train.codeItineraire === itineraire.codeItineraire
+                          )
+                          .map((train) =>
+                            categorieInTrain
+                              .filter(
+                                (categorie) =>
+                                  categorie.immatriculation ===
+                                  train.immatriculation
+                              )
+                              .map((categorie) => (
+                                <tr
+                                  key={uuidv4()}
+                                  className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                                >
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {itineraire.jourDepart}
+                                  </td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {itineraire.heureDepart}
+                                  </td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {categorie.libelleCategorie}
+                                  </td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {categorie.nbPlaceSupporte}
+                                  </td>
+                                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {categorie.frais}
+                                  </td>
+                                </tr>
+                              ))
+                          )}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <tr className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                      <td
+                        className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                        colSpan="5"
+                      >
+                        Vide
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                    {filteredItineraires.length !== 0 ? (
-                      filteredItineraires.map((itineraire) => (
-                        <React.Fragment key={itineraire.codeItineraire}>
-                          {trainInItineraires
-                            .filter(
-                              (train) =>
-                                train.codeItineraire ===
-                                itineraire.codeItineraire
-                            )
-                            .map((train) =>
-                              categorieInTrain
-                                .filter(
-                                  (categorie) =>
-                                    categorie.immatriculation ===
-                                    train.immatriculation
-                                )
-                                .map((categorie) => (
-                                  <tr
-                                    key={categorie.immatriculation}
-                                    className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={() => handleRowClick(categorie)}
-                                  >
-                                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                      {itineraire.jourDepart}
-                                    </td>
-                                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                      {itineraire.heureDepart}
-                                    </td>
-                                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                      {categorie.libelleCategorie}
-                                    </td>
-                                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                      {categorie.nbPlaceSupporte}
-                                    </td>
-                                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                      {categorie.frais} Ar
-                                    </td>
-                                  </tr>
-                                ))
-                            )}
-                        </React.Fragment>
-                      ))
-                    ) : (
-                      <tr className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                        <td
-                          className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
-                          colSpan="5"
-                        >
-                          Vide
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

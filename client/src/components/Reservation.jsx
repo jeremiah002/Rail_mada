@@ -24,11 +24,8 @@ function Reservation() {
     return num.toString().padStart(5, "0");
   }
 
-  const numTicket = 3;
-  const formattedNumTicket = formatTicketNumber(numTicket);
-
   const [formData, setFormData] = useState({
-    NumTicket: formattedNumTicket,
+    NumTicket: "",
     emailVoyageur: "",
     nomVoyageur: "",
     dateDepart: "",
@@ -65,10 +62,6 @@ function Reservation() {
       response = await createVoyageur(formData);
       console.log("Réservation envoyée avec succès");
       console.log(formData);
-      setFormData((prevData) => ({
-        ...prevData,
-        NumTicket: formatTicketNumber(parseInt(prevData.NumTicket, 10) + 1),
-      }));
       clearFormData();
     } catch (error) {
       console.error(error);

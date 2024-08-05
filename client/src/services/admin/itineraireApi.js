@@ -1,4 +1,3 @@
-// src/services/apiReservation.js
 import axios from "axios";
 
 const API_BASE_URL = "http://localhost:5193/api/v1";

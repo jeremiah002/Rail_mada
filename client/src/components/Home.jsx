@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getCategories } from "../services/admin/categorieApi";
+import { getItineraires } from "../services/admin/itineraireApi";
+import { getCategorieInTrain } from "../services/admin/trainApi";
+import { getTrainsInItineraire } from "../services/admin/itineraireApi";
 import "../App.css";
 import logo from "../assets/logo.png";
 import hero from "../assets/hero.png";
@@ -20,6 +24,55 @@ function Home() {
     }
   };
 
+  const [categories, setCategories] = useState([]);
+  const fetchCategories = async () => {
+    const categoriesData = await getCategories();
+    console.log(categoriesData);
+    setCategories(categoriesData);
+  };
+
+  const [itineraires, setItineraires] = useState([]);
+  const fetchItineraires = async () => {
+    const itinerairesData = await getItineraires();
+    console.log(itinerairesData);
+    setItineraires(itinerairesData);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchItineraires();
+  }, []);
+
+  const [trainInItineraires, setTrainInItineraires] = useState([]);
+  const [categorieInTrain, setCategorieInTrain] = useState([]);
+
+  useEffect(() => {
+    const fetchTrainInItineraires = async () => {
+      const trainData = await Promise.all(
+        itineraires.map((itineraire) =>
+          getTrainsInItineraire(itineraire.codeItineraire)
+        )
+      );
+      setTrainInItineraires(trainData.flat()); // Flatten the array if needed
+    };
+
+    fetchTrainInItineraires();
+  }, [itineraires]);
+
+  // Fetch category data when trainInItineraires change
+  useEffect(() => {
+    const fetchCategorieInTrain = async () => {
+      const categorieData = await Promise.all(
+        trainInItineraires.map((train) =>
+          getCategorieInTrain(train.immatriculation)
+        )
+      );
+      setCategorieInTrain(categorieData.flat()); // Flatten the array if needed
+    };
+
+    fetchCategorieInTrain();
+  }, [trainInItineraires]);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -29,9 +82,7 @@ function Home() {
 
   return (
     <>
-      <div
-        className="leading-normal tracking-normal text-white gradient"
-      >
+      <div className="leading-normal tracking-normal text-white gradient">
         <nav
           id="header"
           className={`fixed w-full z-30 top-0 text-white ${
@@ -75,8 +126,10 @@ function Home() {
               <ul className="list-reset lg:flex justify-end flex-1 items-center">
                 <li className="mr-3">
                   <Link
-                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/' ? 'font-bold' : ''}`}
-                  to="/"
+                    className={`inline-block py-2 px-4 no-underline ${
+                      location.pathname === "/" ? "font-bold" : ""
+                    }`}
+                    to="/"
                     id="acc"
                     style={{ color: scrolled ? "black" : "white" }}
                   >
@@ -85,8 +138,10 @@ function Home() {
                 </li>
                 <li className="mr-3">
                   <Link
-                  className={`inline-block py-2 px-4 no-underline ${location.pathname === '/reservation' ? 'font-bold' : ''}`}
-                  id="reservation"
+                    className={`inline-block py-2 px-4 no-underline ${
+                      location.pathname === "/reservation" ? "font-bold" : ""
+                    }`}
+                    id="reservation"
                     to="/reservation"
                     style={{ color: scrolled ? "black" : "white" }}
                   >
@@ -100,7 +155,7 @@ function Home() {
                   scrolled ? "gradient text-white" : "bg-white text-gray-800"
                 } mx-auto lg:mx-0 hover:underline font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
               `}
-              onClick={() => navigate('/reservation')}
+                onClick={() => navigate("/reservation")}
               >
                 Contact
               </button>
@@ -125,7 +180,10 @@ function Home() {
                 Votre billets de train en quelques clics, pour des voyages
                 faciles et abordables !
               </p>
-              <button className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out" onClick={() => navigate('/reservation')}>
+              <button
+                className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+                onClick={() => navigate("/reservation")}
+              >
                 Aller
               </button>
             </div>
@@ -182,17 +240,16 @@ function Home() {
             <div className="flex flex-wrap">
               <div className="w-5/6 sm:w-1/2 p-6">
                 <h3 className="text-3xl text-gray-800 font-bold leading-none mb-3">
-                Paysages Magnifiques
+                  Paysages Magnifiques
                 </h3>
                 <p className="text-gray-600 mb-8">
-                  "Voyager en train offre une sensation unique de liberté et de découverte, permettant d'apprécier chaque moment du trajet tout en bénéficiant d'un confort inégalé."
+                  "Voyager en train offre une sensation unique de liberté et de
+                  découverte, permettant d'apprécier chaque moment du trajet
+                  tout en bénéficiant d'un confort inégalé."
                   <br />
                   <br />
                   Aller à:
-                  <Link
-                    className="text-pink-500 underline"
-                    to="/reservation"
-                  >
+                  <Link className="text-pink-500 underline" to="/reservation">
                     réservation.co
                   </Link>
                 </p>
@@ -224,8 +281,9 @@ function Home() {
                     Confort Supérieur.
                   </div>
                   <p className="text-gray-800 text-base px-6 mb-5">
-                    Sièges plus larges et plus spacieux, souvent inclinables et parfois avec des repose-pieds.
-                    Plus d'espace pour les jambes et un environnement généralement plus calme.
+                    Sièges plus larges et plus spacieux, souvent inclinables et
+                    parfois avec des repose-pieds. Plus d'espace pour les jambes
+                    et un environnement généralement plus calme.
                   </p>
                 </a>
               </div>
@@ -243,8 +301,9 @@ function Home() {
                     Confort Standard.
                   </div>
                   <p className="text-gray-800 text-base px-6 mb-5">
-                    Sièges confortables mais moins spacieux et moins inclinables que ceux de la première classe.
-                    Moins d'espace pour les jambes comparé à la première classe.
+                    Sièges confortables mais moins spacieux et moins inclinables
+                    que ceux de la première classe. Moins d'espace pour les
+                    jambes comparé à la première classe.
                   </p>
                 </a>
               </div>
@@ -262,8 +321,9 @@ function Home() {
                     Confort Basique.
                   </div>
                   <p className="text-gray-800 text-base px-6 mb-5">
-                    Sièges souvent moins confortables, avec moins d'espace pour les jambes et sans options d'inclinaison.
-                    Embarquement et débarquement standard, souvent plus de files d'attente.
+                    Sièges souvent moins confortables, avec moins d'espace pour
+                    les jambes et sans options d'inclinaison. Embarquement et
+                    débarquement standard, souvent plus de files d'attente.
                   </p>
                 </a>
               </div>
@@ -284,15 +344,44 @@ function Home() {
                   <div className="p-8 text-3xl font-bold text-center border-b-4">
                     2e classNamee
                   </div>
-                  <ul className="w-full text-center text-sm">
-                    <li className="border-b py-4">FNR - MKR</li>
-                    <li className="border-b py-4">TNR - MRM</li>
-                    <li className="border-b py-4">MRM - TMV</li>
-                  </ul>
+                  {itineraires.length !== 0 ? (
+                    itineraires.map((itineraire) => (
+                      <React.Fragment key={itineraire.codeItineraire}>
+                        {trainInItineraires
+                          .filter(
+                            (train) =>
+                              train.codeItineraire === itineraire.codeItineraire
+                          )
+                          .map((train) =>
+                            categorieInTrain
+                              .filter(
+                                (categorie) =>
+                                  categorie.immatriculation ===
+                                  train.immatriculation
+                              )
+                              .map((categorie) => (
+                                <div>
+                                  <ul
+                                    className="w-full text-center text-base font-bold"
+                                    key={categorie.immatriculation}
+                                  >
+                                    <li className="border-b py-4">
+                                      {itineraire.lieuDepart} -{" "}
+                                      {itineraire.lieuArrivee}
+                                    </li>
+                                  </ul>
+                                </div>
+                              ))
+                          )}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <li className="border-b py-4">Aucune</li>
+                  )}
                 </div>
                 <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
                   <div className="w-full pt-6 text-3xl text-gray-600 font-bold text-center">
-                    Ar.99
+                      Ar.15000
                     <span className="text-base">/ par personne</span>
                   </div>
                   <div className="flex items-center justify-center">
@@ -308,15 +397,42 @@ function Home() {
                     1re classNamee
                   </div>
                   <div className="h-1 w-full gradient my-0 py-0 rounded-t"></div>
-                  <ul className="w-full text-center text-base font-bold">
-                    <li className="border-b py-4">FNR - MKR</li>
-                    <li className="border-b py-4">TNR - MRM</li>
-                    <li className="border-b py-4">MRM - TMV</li>
-                  </ul>
+                  {itineraires.length !== 0 ? (
+                    itineraires.map((itineraire) => (
+                      <React.Fragment key={itineraire.codeItineraire}>
+                        {trainInItineraires
+                          .filter(
+                            (train) =>
+                              train.codeItineraire === itineraire.codeItineraire
+                          )
+                          .map((train) =>
+                            categorieInTrain
+                              .filter(
+                                (categorie) =>
+                                  categorie.immatriculation ===
+                                  train.immatriculation
+                              )
+                              .map((categorie) => (
+                                <ul
+                                  className="w-full text-center text-base font-bold"
+                                  key={categorie.immatriculation}
+                                >
+                                  <li className="border-b py-4">
+                                    {itineraire.lieuDepart} -{" "}
+                                    {itineraire.lieuArrivee}
+                                  </li>
+                                </ul>
+                              ))
+                          )}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <li className="border-b py-4">Aucune</li>
+                  )}
                 </div>
                 <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
                   <div className="w-full pt-6 text-4xl font-bold text-center">
-                    Ar.99
+                    Ar.30000
                     <span className="text-base">/ par personne</span>
                   </div>
                   <div className="flex items-center justify-center">
@@ -331,15 +447,42 @@ function Home() {
                   <div className="p-8 text-3xl font-bold text-center border-b-4">
                     3e classNamee
                   </div>
-                  <ul className="w-full text-center text-sm">
-                    <li className="border-b py-4">FNR - MKR</li>
-                    <li className="border-b py-4">TNR - MRM</li>
-                    <li className="border-b py-4">MRM - TMV</li>
-                  </ul>
+                  {itineraires.length !== 0 ? (
+                    itineraires.map((itineraire) => (
+                      <React.Fragment key={itineraire.codeItineraire}>
+                        {trainInItineraires
+                          .filter(
+                            (train) =>
+                              train.codeItineraire === itineraire.codeItineraire
+                          )
+                          .map((train) =>
+                            categorieInTrain
+                              .filter(
+                                (categorie) =>
+                                  categorie.immatriculation ===
+                                  train.immatriculation
+                              )
+                              .map((categorie) => (
+                                <ul
+                                  className="w-full text-center text-base font-bold"
+                                  key={categorie.immatriculation}
+                                >
+                                  <li className="border-b py-4">
+                                    {itineraire.lieuDepart} -{" "}
+                                    {itineraire.lieuArrivee}
+                                  </li>
+                                </ul>
+                              ))
+                          )}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <li className="border-b py-4">Aucune</li>
+                  )}
                 </div>
                 <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
                   <div className="w-full pt-6 text-3xl text-gray-600 font-bold text-center">
-                    Ar.99
+                    Ar.10000
                     <span className="text-base">/ par personne</span>
                   </div>
                   <div className="flex items-center justify-center">
@@ -393,7 +536,10 @@ function Home() {
           <h3 className="my-4 text-3xl leading-tight">
             Éviter de vous déplacer en achetant vos billets en ligne.
           </h3>
-          <button className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out" onClick={() => navigate('/reservation')}>
+          <button
+            className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+            onClick={() => navigate("/reservation")}
+          >
             Reserver
           </button>
         </section>

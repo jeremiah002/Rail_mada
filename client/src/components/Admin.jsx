@@ -1,18 +1,60 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import "../App.css";
 import logo from "../assets/logo.png";
 import {
   createItineraire,
   getItineraires,
   deleteItineraire,
-  editItineraire
+  editItineraire,
 } from "../services/admin/itineraireApi";
-import { createTrain, getTrains, editTrain, deleteTrain } from "../services/admin/trainApi";
-import { createCategorie, deleteCategorie, editCategorie, getCategories } from "../services/admin/categorieApi";
+import {
+  createTrain,
+  getTrains,
+  editTrain,
+  deleteTrain,
+} from "../services/admin/trainApi";
+import {
+  createCategorie,
+  deleteCategorie,
+  editCategorie,
+  getCategories,
+} from "../services/admin/categorieApi";
 import { getVoyageurs } from "../services/reservationApi";
 import { useNavigate } from "react-router-dom";
 
 function Admin() {
+  const addSucess = () => {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Ajouter avec succès!",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  };
+  const addItineraireWrong = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Ce code itinéraire existe déja!",
+    });
+  };
+  const addTrainWrong = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Cette immatriculation existe déja!",
+    });
+  };
+  const addCategorieWrong = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Ce code catégorie existe déja!",
+    });
+  };
+
   const navigate = useNavigate();
   // Itineraire controller
 
@@ -37,7 +79,7 @@ function Admin() {
   const handleChangeItineraire = (e) => {
     setFormDataItineraire({
       ...formDataItineraire,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -55,7 +97,6 @@ function Admin() {
       codeItineraire: itineraire.codeItineraire,
     });
   };
- 
 
   const [itineraires, setItineraires] = useState([]);
   const fetchItineraires = async () => {
@@ -68,8 +109,13 @@ function Admin() {
     try {
       const response = await deleteItineraire(selectedItinerary.codeItineraire);
       if (response.status === 200) {
+        Swal.fire({
+          title: "Supprimé!",
+          text: "Itinéraire supprimées avec succès.",
+          icon: "success",
+        });
         console.log(response.data);
-        fetchItineraires(); // maj
+        fetchItineraires(); // Mettre à jour les itinéraires
       }
     } catch (error) {
       console.error(error);
@@ -78,16 +124,29 @@ function Admin() {
 
   const itineraireSubmit = async (e) => {
     e.preventDefault();
-   
+
+    const exists = itineraires.some(
+      (itineraire) =>
+        itineraire.codeItineraire === formDataItineraire.codeItineraire
+    );
+    if (exists) {
+      addItineraireWrong();
+      return;
+    }
+
     try {
       let response;
       if (isEditing) {
-        response = await editItineraire(selectedItinerary.codeItineraire, formDataItineraire);
+        response = await editItineraire(
+          selectedItinerary.codeItineraire,
+          formDataItineraire
+        );
         console.log(formDataItineraire);
       } else {
         response = await createItineraire(formDataItineraire);
       }
       if (response.status === 200) {
+        addSucess();
         setFormDataItineraire({
           lieuDepart: "",
           lieuArrivee: "",
@@ -95,9 +154,12 @@ function Admin() {
           heureDepart: "",
           codeItineraire: "",
         });
-      console.log(response.data);
-      setIsEditing(false); // Réinitialiser le mode d'édition après la soumission
-      fetchItineraires(); // Récupérer les données mises à jour
+        console.log(response.data);
+        setIsEditing(false); // Réinitialiser le mode d'édition après la soumission
+        fetchItineraires(); // Récupérer les données mises à jour
+      }
+      if (response.status === 500) {
+        addWrong();
       }
     } catch (error) {
       console.error(error);
@@ -136,30 +198,42 @@ function Admin() {
     setSelectedTrain(train);
     setFormDataTrain({
       immatriculation: train.immatriculation,
-      codeItineraire: train.codeItineraire
+      codeItineraire: train.codeItineraire,
     });
     handleChangeTrain;
   };
 
   const trainSubmit = async (e) => {
     e.preventDefault();
-   
+
+    const exists = trains.some(
+      (train) => train.immatriculation === formDataTrain.immatriculation
+    );
+    if (exists) {
+      addTrainWrong();
+      return;
+    }
+
     try {
       let response;
       if (isEditingTrain) {
-        response = await editTrain(selectedTrain.immatriculation, formDataTrain);
+        response = await editTrain(
+          selectedTrain.immatriculation,
+          formDataTrain
+        );
         console.log(formDataTrain);
       } else {
         response = await createTrain(formDataTrain);
       }
       if (response.status === 200) {
+        addSucess();
         setFormDataTrain({
           immatriculation: "",
-          codeItineraire: ""
+          codeItineraire: "",
         });
-      console.log(response.data);
-      setIsEditingTrain(false); // Réinitialiser le mode d'édition après la soumission
-      fetchTrains(); // Récupérer les données mises à jour
+        console.log(response.data);
+        setIsEditingTrain(false); // Réinitialiser le mode d'édition après la soumission
+        fetchTrains(); // Récupérer les données mises à jour
       }
     } catch (error) {
       console.error(error);
@@ -170,6 +244,11 @@ function Admin() {
     try {
       const response = await deleteTrain(selectedTrain.immatriculation);
       if (response.status === 200) {
+        Swal.fire({
+          title: "Supprimé!",
+          text: "Train supprimées avec succès.",
+          icon: "success",
+        });
         console.log(response.data);
         setIsEditingTrain(false); // Sortir du mode d'édition après suppression
         fetchTrains(); // maj
@@ -188,7 +267,7 @@ function Admin() {
     frais: 0,
     immatriculation: "",
   });
-  
+
   const [categories, setCategories] = useState([]);
   const fetchCategories = async () => {
     const categoriesData = await getCategories();
@@ -215,7 +294,8 @@ function Admin() {
 
   const [isEditingCategorie, setIsEditingCategorie] = useState(false);
   const [selectedCategorie, setSelectedCategorie] = useState(null);
-  const editCategorieForm = (categorie, e) => { // Ajoutez e comme paramètre
+  const editCategorieForm = (categorie, e) => {
+    // Ajoutez e comme paramètre
     e.preventDefault();
     setIsEditingCategorie(true);
     setSelectedCategorie(categorie);
@@ -230,16 +310,28 @@ function Admin() {
 
   const categorieSubmit = async (e) => {
     e.preventDefault();
-   
+
+    const exists = categories.some(
+      (categorie) => categorie.codeCategorie === formDataCategorie.codeCategorie
+    );
+    if (exists) {
+      addCategorieWrong();
+      return;
+    }
+
     try {
       let response;
       if (isEditingCategorie) {
-        response = await editCategorie(selectedCategorie.codeCategorie, formDataCategorie);
+        response = await editCategorie(
+          selectedCategorie.codeCategorie,
+          formDataCategorie
+        );
         console.log(formDataCategorie);
       } else {
         response = await createCategorie(formDataCategorie);
       }
       if (response.status === 200) {
+        addSucess();
         setFormDataCategorie({
           codeCategorie: "",
           libelleCategorie: "",
@@ -247,9 +339,9 @@ function Admin() {
           frais: "",
           immatriculation: "",
         });
-      console.log(response.data);
-      setIsEditingCategorie(false); // Réinitialiser le mode d'édition après la soumission
-      fetchCategories(); // Récupérer les données mises à jour
+        console.log(response.data);
+        setIsEditingCategorie(false); // Réinitialiser le mode d'édition après la soumission
+        fetchCategories(); // Récupérer les données mises à jour
       }
     } catch (error) {
       console.error(error);
@@ -260,6 +352,11 @@ function Admin() {
     try {
       const response = await deleteCategorie(selectedCategorie.codeCategorie);
       if (response.status === 200) {
+        Swal.fire({
+          title: "Supprimé!",
+          text: "Catégorie supprimées avec succès.",
+          icon: "success",
+        });
         console.log(response.data);
         setIsEditingCategorie(false); // Sortir du mode d'édition après suppression
         fetchCategories(); // maj
@@ -268,7 +365,6 @@ function Admin() {
       console.error(error);
     }
   };
-
 
   // Voyageur
 
@@ -287,7 +383,7 @@ function Admin() {
     console.log(voyageursData);
     setVoyageurs(voyageursData);
   };
-  
+
   useEffect(() => {
     fetchItineraires();
     fetchCategories();
@@ -361,7 +457,10 @@ function Admin() {
       <div className="mx-auto p-4 mt-28">
         <div className="flex flex-wrap -mx-4">
           <div className="w-full md:w-1/2 px-4 mb-0">
-            <div style={{height: '340px'}} className="neon bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div
+              style={{ height: "340px" }}
+              className="neon bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+            >
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Train
               </h2>
@@ -423,14 +522,17 @@ function Admin() {
               </table>
             </div>
 
-            <div style={{height: '550px'}} className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
+            <div
+              style={{ height: "550px" }}
+              className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300"
+            >
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Catégorie
               </h2>
               <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                 <thead className="bg-gray-100 dark:bg-gray-700">
                   <tr>
-                  <th
+                    <th
                       scope="col"
                       className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
                     >
@@ -512,7 +614,10 @@ function Admin() {
               </table>
             </div>
 
-            <div style={{height: '490px'}} className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
+            <div
+              style={{ height: "490px" }}
+              className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300"
+            >
               <h2 className="text-center font-semibold leading-7 text-gray-900">
                 Itinéraire
               </h2>
@@ -600,8 +705,6 @@ function Admin() {
                 </tbody>
               </table>
             </div>
-
-            
           </div>
           <div className="w-full md:w-1/2 px-4 mb-4">
             <div className="neon bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -650,7 +753,8 @@ function Admin() {
                             autoComplete="itineraire-name"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             onChange={handleChangeTrain}
-                          ><option value=""></option>
+                          >
+                            <option value=""></option>
                             {itineraires.length !== 0 ? (
                               itineraires.map((itineraire) => (
                                 <option
@@ -681,12 +785,13 @@ function Admin() {
                       Annuler
                     </button>
                     {isEditingTrain && (
-                      <button type="button" 
-                      onClick={() => {
-                        setIsEditingTrain(false);
-                        deleteCurrentTrain(selectedTrain.immatriculation);
-                        resetFormDataTrain();
-                      }}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsEditingTrain(false);
+                          deleteCurrentTrain(selectedTrain.immatriculation);
+                          resetFormDataTrain();
+                        }}
                       >
                         Supprimer
                       </button>
@@ -700,15 +805,13 @@ function Admin() {
                   </div>
                 </form>
 
-
                 <form onSubmit={categorieSubmit}>
                   <div className="border-b border-gray-900/10 pb-12">
                     <h2 className="text-base font-semibold leading-7 text-gray-900">
                       Catégorie
                     </h2>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
-                    <div className="sm:col-span-4">
+                      <div className="sm:col-span-4">
                         <label
                           htmlFor="classe"
                           className="block text-sm font-medium leading-6 text-gray-900"
@@ -764,26 +867,27 @@ function Admin() {
                         <div className="mt-2">
                           <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                             <select
-                            id="immatriculation"
-                            name="immatriculation"
-                            value={formDataCategorie.immatriculation}
-                            autoComplete="immatriculation"
-                            className="pl-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            onChange={handleChangeCategorie}
-                          ><option value=""></option>
-                            {trains.length !== 0 ? (
-                              trains.map((train) => (
-                                <option
-                                  key={train.immatriculation}
-                                  value={train.immatriculation}
-                                >
-                                  {train.immatriculation}
-                                </option>
-                              ))
-                            ) : (
+                              id="immatriculation"
+                              name="immatriculation"
+                              value={formDataCategorie.immatriculation}
+                              autoComplete="immatriculation"
+                              className="pl-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              onChange={handleChangeCategorie}
+                            >
                               <option value=""></option>
-                            )}
-                          </select>
+                              {trains.length !== 0 ? (
+                                trains.map((train) => (
+                                  <option
+                                    key={train.immatriculation}
+                                    value={train.immatriculation}
+                                  >
+                                    {train.immatriculation}
+                                  </option>
+                                ))
+                              ) : (
+                                <option value=""></option>
+                              )}
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -843,12 +947,15 @@ function Admin() {
                       Annuler
                     </button>
                     {isEditingCategorie && (
-                      <button type="button" 
-                      onClick={() => {
-                        setIsEditingCategorie(false);
-                        deleteCurrentCategorie(selectedCategorie.codeCategorie);
-                        resetFormDataCategorie();
-                      }}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsEditingCategorie(false);
+                          deleteCurrentCategorie(
+                            selectedCategorie.codeCategorie
+                          );
+                          resetFormDataCategorie();
+                        }}
                       >
                         Supprimer
                       </button>
@@ -985,17 +1092,26 @@ function Admin() {
                   </div>
 
                   <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button type="button" onClick={() => {
-                      setIsEditing(false);
-                      resetFormDataItineraire();
-                    }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsEditing(false);
+                        resetFormDataItineraire();
+                      }}
+                    >
                       Annuler
                     </button>
                     {isEditing && (
-                      <button type="button" onClick={() => {
-                        deleteCurrentItinerary(selectedItinerary.codeItineraire);
-                        setIsEditing(false);
-                        resetFormDataItineraire(); }}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          deleteCurrentItinerary(
+                            selectedItinerary.codeItineraire
+                          );
+                          setIsEditing(false);
+                          resetFormDataItineraire();
+                        }}
+                      >
                         Supprimer
                       </button>
                     )}
@@ -1013,89 +1129,88 @@ function Admin() {
         </div>
       </div>
 
-
       <div className="neon bg-white p-6 rounded-lg shadow-lg mt-12 hover:shadow-xl transition-shadow duration-300">
-              <h2 className="text-center font-semibold leading-7 text-gray-900">
-                Voyageurs
-              </h2>
-              <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
-                <thead className="bg-gray-100 dark:bg-gray-700">
-                  <tr>
-                    <th scope="col" className="p-4">
-                      Ticket
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Nom
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Email
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Date depart
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Nb Place
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
-                    >
-                      Code Categorie
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                  {voyageurs.length !== 0 ? (
-                    voyageurs.map((voyageur) => (
-                      <tr
-                        key={voyageur.numTicket}
-                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                      >
-                        <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          {voyageur.numTicket}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.nomVoyageur}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.emailVoyageur}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.dateDepart}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.nbPlace}
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                          {voyageur.codeCategorie}
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <td
-                        colSpan="6"
-                        className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
-                      >
-                        AUCUN VOYAGEUR
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+        <h2 className="text-center font-semibold leading-7 text-gray-900">
+          Voyageurs
+        </h2>
+        <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
+          <thead className="bg-gray-100 dark:bg-gray-700">
+            <tr>
+              <th scope="col" className="p-4">
+                Ticket
+              </th>
+              <th
+                scope="col"
+                className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+              >
+                Nom
+              </th>
+              <th
+                scope="col"
+                className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+              >
+                Email
+              </th>
+              <th
+                scope="col"
+                className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+              >
+                Date depart
+              </th>
+              <th
+                scope="col"
+                className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+              >
+                Nb Place
+              </th>
+              <th
+                scope="col"
+                className="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase dark:text-gray-400"
+              >
+                Code Categorie
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+            {voyageurs.length !== 0 ? (
+              voyageurs.map((voyageur) => (
+                <tr
+                  key={voyageur.numTicket}
+                  className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                    {voyageur.numTicket}
+                  </td>
+                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                    {voyageur.nomVoyageur}
+                  </td>
+                  <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white text-center">
+                    {voyageur.emailVoyageur}
+                  </td>
+                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                    {voyageur.dateDepart}
+                  </td>
+                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                    {voyageur.nbPlace}
+                  </td>
+                  <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                    {voyageur.codeCategorie}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                <td
+                  colSpan="6"
+                  className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                >
+                  AUCUN VOYAGEUR
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

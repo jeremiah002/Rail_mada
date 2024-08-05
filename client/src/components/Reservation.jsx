@@ -5,6 +5,7 @@ import { getCategories } from "../services/admin/categorieApi";
 import { getItineraires } from "../services/admin/itineraireApi";
 import { getTrainsInItineraire } from "../services/admin/itineraireApi";
 import { getCategorieInTrain } from "../services/admin/trainApi";
+import { v4 as uuidv4 } from "uuid";
 import "../App.css";
 import logo from "../assets/logo.png";
 import logobody from "../assets/logobody.png";
@@ -23,11 +24,8 @@ function Reservation() {
     return num.toString().padStart(5, "0");
   }
 
-  const numTicket = 1;
-  const formattedNumTicket = formatTicketNumber(numTicket); // '00001'
-
   const [formData, setFormData] = useState({
-    NumTicket: formattedNumTicket,
+    NumTicket: "",
     emailVoyageur: "",
     nomVoyageur: "",
     dateDepart: "",
@@ -50,18 +48,7 @@ function Reservation() {
   };
 
   const [trainInItineraires, setTrainInItineraires] = useState([]);
-  // const fetchTrainInItineraires = async (codeItineraire) => {
-  //   const trainInItinerairesData = await getTrainsInItineraire(codeItineraire);
-  //   console.log(trainInItinerairesData);
-  //   setTrainInItineraires(trainInItinerairesData);
-  // };
-
   const [categorieInTrain, setCategorieInTrain] = useState([]);
-  // const fetchCategorieInTrain = async (immatriculation) => {
-  //   const categorieInTrainData = await getCategorieInTrain(immatriculation);
-  //   console.log(categorieInTrainData);
-  //   setCategorieInTrain(categorieInTrainData);
-  // };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -75,10 +62,7 @@ function Reservation() {
       response = await createVoyageur(formData);
       console.log("Réservation envoyée avec succès");
       console.log(formData);
-      setFormData((prevData) => ({
-        ...prevData,
-        NumTicket: formatTicketNumber(parseInt(prevData.NumTicket, 10) + 1),
-      }));
+      clearFormData();
     } catch (error) {
       console.error(error);
     }
@@ -127,8 +111,6 @@ function Reservation() {
 
   const [selectedLieuDepart, setSelectedLieuDepart] = useState("");
   const [selectedLieuArrivee, setSelectedLieuArrivee] = useState("");
-  const [selectedLibelleItineraire, setSelectedLibelleItineraire] =
-    useState("");
 
   // Fonction pour gérer les changements dans le combobox lieuDepart
   const handleLieuDepartChange = (event) => {
@@ -138,11 +120,6 @@ function Reservation() {
   // Fonction pour gérer les changements dans le combobox lieuArrivee
   const handleLieuArriveeChange = (event) => {
     setSelectedLieuArrivee(event.target.value);
-  };
-
-  // Fonction pour gérer le clic sur une ligne
-  const handleRowClick = (itineraire) => {
-    setSelectedLibelleItineraire(itineraire);
   };
 
   // Filtrer les itinéraires basés sur les sélections
@@ -155,6 +132,24 @@ function Reservation() {
         ? itineraire.lieuArrivee === selectedLieuArrivee
         : true)
   );
+
+  const clearFormData = (event) => {
+    setFormData({
+      emailVoyageur: "",
+      nomVoyageur: "",
+      dateDepart: "",
+      nbPlace: 1,
+      codeCategorie: "",
+    });
+  };
+
+  // Ajoutez cette fonction dans votre composant Reservation pour gérer les clics sur les lignes du tableau
+  const handleRowClick = (codeCategorie) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      codeCategorie: codeCategorie,
+    }));
+  };
 
   return (
     <>
@@ -232,7 +227,7 @@ function Reservation() {
         <div className="flex flex-wrap -mx-4">
           {/* Blog1 */}
           <div className="w-full md:w-2/5 px-4 mb-4">
-            <div className="neon h-full bg-white p-6 rounded-lg shadow-lg">
+            <div className="neon bg-white p-6 rounded-lg shadow-lg">
               <form onSubmit={handleSubmit}>
                 <div className="space-y-12">
                   <div className="border-b border-gray-900/10 pb-12">
@@ -316,13 +311,10 @@ function Reservation() {
                           <select
                             id="codeCategorie"
                             name="codeCategorie"
-                            disabled
-                            value={selectedLibelleItineraire.codeCategorie}
+                            value={formData.codeCategorie}
                             autoComplete="categorie-name"
                             className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                            onChange={(e) =>
-                              setSelectedLibelleItineraire(e.target.value)
-                            }
+                            onChange={handleChange}
                           >
                             <option value=""></option>
                             {categories.length !== 0 ? (
@@ -366,6 +358,7 @@ function Reservation() {
                   <button
                     type="button"
                     className="text-sm font-semibold leading-6 text-gray-900"
+                    onClick={clearFormData}
                   >
                     Annuler
                   </button>
@@ -437,7 +430,7 @@ function Reservation() {
                 </div>
               </div>
 
-              <table className="w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
+              <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                 <thead className="bg-gray-100 dark:bg-gray-700">
                   <tr>
                     {datahead.map((item) => (
@@ -454,7 +447,7 @@ function Reservation() {
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                   {filteredItineraires.length !== 0 ? (
                     filteredItineraires.map((itineraire) => (
-                      <React.Fragment key={itineraire.codeItineraire}>
+                      <React.Fragment key={uuidv4()}>
                         {trainInItineraires
                           .filter(
                             (train) =>
@@ -469,9 +462,11 @@ function Reservation() {
                               )
                               .map((categorie) => (
                                 <tr
-                                  key={categorie.immatriculation}
+                                  key={uuidv4()}
                                   className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                                  onClick={() => handleRowClick(categorie)}
+                                  onClick={() =>
+                                    handleRowClick(categorie.codeCategorie)
+                                  }
                                 >
                                   <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                     {itineraire.jourDepart}

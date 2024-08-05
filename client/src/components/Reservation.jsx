@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { createVoyageur } from "../services/reservationApi";
 import { getCategories } from "../services/admin/categorieApi";
+import { getItineraires } from "../services/admin/itineraireApi";
 import "../App.css";
 import logo from "../assets/logo.png";
 import logobody from "../assets/logobody.png";
@@ -9,11 +10,9 @@ import logobody from "../assets/logobody.png";
 function Reservation() {
   const location = useLocation();
   const [datahead, setDatahead] = useState([
-    {id: 1, libelle:'Catégories'},
-    {id: 2, libelle:'Départ'},
-    {id: 3, libelle:'Destination'},
-    {id: 4, libelle:'Heure'},
-    {id: 5, libelle:'Frais'},
+    {id: 1, libelle:'Jour'},
+    {id: 2, libelle:'Heure'},
+    {id: 3, libelle:'Frais'},
   ]);
 
   function formatTicketNumber(num) {
@@ -39,6 +38,14 @@ function Reservation() {
     setCategories(categoriesData);
   };
 
+  const [itineraires, setItineraires] = useState([]);
+  const fetchItineraires = async () => {
+    const itinerairesData = await getItineraires();
+    console.log(itinerairesData);
+    setItineraires(itinerairesData);
+  };
+
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -59,6 +66,7 @@ function Reservation() {
 
   useEffect(() => {
     fetchCategories();
+    fetchItineraires();
   }, []);
 
   return (
@@ -199,16 +207,14 @@ function Reservation() {
                           Date
                         </label>
                         <div className="mt-2">
-                          <select
+                          <input
                             id="date"
+                            type="date"
                             name="dateDepart"
                             value={formData.dateDepart}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
                             onChange={handleChange}
-                          >
-                            <option value=""></option>
-                            <option value="20-08-2024">20-08</option>
-                          </select>
+                          />
                         </div>
                       </div>
                       <br />
@@ -290,6 +296,62 @@ function Reservation() {
               </h2>
               <div className="flex justify-center mb-2">
                 <img src={logobody} alt="Logobody" className="w-32 h-32" />
+              </div>
+              <div className="flex flex-nowrap -mx-4 w-full">
+                <div className="sm:w-1/2 mb-4 px-4">
+                  <label
+                    htmlFor="lieuDepart"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Depart
+                  </label>
+                  <select 
+                    name="lieuDepart" 
+                    id="depart"
+                    className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  >  
+                    <option value=""></option>
+                    {itineraires.length !== 0 ? (
+                              itineraires.map((itineraire) => (
+                                <option
+                                  key={itineraire.codeItineraire}
+                                  value={itineraire.lieuDepart}
+                                >
+                                  {itineraire.lieuDepart}
+                                </option>
+                              ))
+                            ) : (
+                              <option value=""></option>
+                      )}
+                  </select>
+                </div>
+                <div className="sm:w-1/2 mb-4 px-4">
+                  <label
+                    htmlFor="lieuArrivee"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Destination
+                  </label>
+                  <select 
+                    name="lieuArrivee" 
+                    id="depart"
+                    className="h-9 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  >  
+                    <option value=""></option>
+                    {itineraires.length !== 0 ? (
+                              itineraires.map((itineraire) => (
+                                <option
+                                  key={itineraire.codeItineraire}
+                                  value={itineraire.lieuArrivee}
+                                >
+                                  {itineraire.lieuArrivee}
+                                </option>
+                              ))
+                            ) : (
+                              <option value=""></option>
+                      )}
+                  </select>
+                </div>
               </div>
               <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                 <thead className="bg-gray-100 dark:bg-gray-700">

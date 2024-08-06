@@ -28,7 +28,7 @@ function Admin() {
     Swal.fire({
       position: "center",
       icon: "success",
-      title: "Ajouter avec succès!",
+      title: "Opération effectuée avec succès!",
       showConfirmButton: false,
       timer: 1500,
     });
@@ -125,14 +125,14 @@ function Admin() {
   const itineraireSubmit = async (e) => {
     e.preventDefault();
 
-    const exists = itineraires.some(
-      (itineraire) =>
-        itineraire.codeItineraire === formDataItineraire.codeItineraire
-    );
-    if (exists) {
-      addItineraireWrong();
-      return;
-    }
+    // const exists = itineraires.some(
+    //   (itineraire) =>
+    //     itineraire.codeItineraire === formDataItineraire.codeItineraire
+    // );
+    // if (exists) {
+    //   addItineraireWrong();
+    //   return;
+    // }
 
     try {
       let response;
@@ -144,9 +144,9 @@ function Admin() {
         console.log(formDataItineraire);
       } else {
         response = await createItineraire(formDataItineraire);
+        addSucess();
       }
       if (response.status === 200) {
-        addSucess();
         setFormDataItineraire({
           lieuDepart: "",
           lieuArrivee: "",
@@ -206,13 +206,13 @@ function Admin() {
   const trainSubmit = async (e) => {
     e.preventDefault();
 
-    const exists = trains.some(
-      (train) => train.immatriculation === formDataTrain.immatriculation
-    );
-    if (exists) {
-      addTrainWrong();
-      return;
-    }
+    // const exists = trains.some(
+    //   (train) => train.immatriculation === formDataTrain.immatriculation
+    // );
+    // if (exists) {
+    //   addTrainWrong();
+    //   return;
+    // }
 
     try {
       let response;
@@ -311,13 +311,13 @@ function Admin() {
   const categorieSubmit = async (e) => {
     e.preventDefault();
 
-    const exists = categories.some(
-      (categorie) => categorie.codeCategorie === formDataCategorie.codeCategorie
-    );
-    if (exists) {
-      addCategorieWrong();
-      return;
-    }
+    // const exists = categories.some(
+    //   (categorie) => categorie.codeCategorie === formDataCategorie.codeCategorie
+    // );
+    // if (exists) {
+    //   addCategorieWrong();
+    //   return;
+    // }
 
     try {
       let response;
@@ -733,6 +733,7 @@ function Admin() {
                               className="block w-full border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                               placeholder="Immatriculation du Train"
                               onChange={handleChangeTrain}
+                              required
                             />
                           </div>
                         </div>
@@ -829,6 +830,7 @@ function Admin() {
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                               placeholder="Code Categorie"
                               onChange={handleChangeCategorie}
+                              required
                             />
                           </div>
                         </div>
@@ -852,6 +854,7 @@ function Admin() {
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                               placeholder="Libelle Classe"
                               onChange={handleChangeCategorie}
+                              required
                             />
                           </div>
                         </div>
@@ -908,6 +911,7 @@ function Admin() {
                             autoComplete="address-level2"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             onChange={handleChangeCategorie}
+                            required
                           />
                         </div>
                       </div>
@@ -929,6 +933,7 @@ function Admin() {
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             placeholder="Ariary"
                             onChange={handleChangeCategorie}
+                            required
                           />
                         </div>
                       </div>
@@ -992,6 +997,7 @@ function Admin() {
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             placeholder="lieu de depart"
                             onChange={handleChangeItineraire}
+                            required
                           />
                         </div>
                       </div>
@@ -1013,6 +1019,7 @@ function Admin() {
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             placeholder="lieu d'arrivee"
                             onChange={handleChangeItineraire}
+                            required
                           />
                         </div>
                       </div>
@@ -1035,6 +1042,7 @@ function Admin() {
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                               placeholder="Code Itineraire"
                               onChange={handleChangeItineraire}
+                              required
                             />
                           </div>
                         </div>
@@ -1084,6 +1092,7 @@ function Admin() {
                               id="time"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6"
                               onChange={handleChangeItineraire}
+                              required
                             />
                           </div>
                         </div>
